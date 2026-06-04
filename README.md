@@ -67,11 +67,17 @@ any other marketplace.
 
 ```
 claude --plugin-dir ./plugins/work-loop      # load without installing
-/reload-plugins                              # after editing agents/hooks/manifests
+/reload-plugins                              # after editing the manifests
 ```
 
-Edits to `skills/work-loop/SKILL.md` hot-reload immediately; manifest, agent,
-and hook changes need `/reload-plugins`.
+Edits to `skills/work-loop/SKILL.md` take effect immediately in the session;
+changes to the manifests (`plugin.json` / `marketplace.json`) need
+`/reload-plugins`.
+
+> **Note:** a `--plugin-dir` load has no marketplace context, so the
+> `skill-codex` dependency is **not** auto-resolved this way. For the Codex
+> passes to run during local dev, install `skill-codex` separately (or add this
+> marketplace and install work-loop normally).
 
 ## Updating
 
