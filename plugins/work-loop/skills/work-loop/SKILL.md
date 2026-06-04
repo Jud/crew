@@ -46,7 +46,7 @@ while agenda not exhausted:
     /simplify                # quality pass — the real skill
     │                        # ↑ run BOTH, as distinct passes; never combine
     Inline codex             # only if the unit is hard (discretion)
-    Comment cleanup
+    Editor                   # clean the unit's written content (comments + prose)
     Mid-turn close           # required once a chunk forms: /simplify → codex
     └─ loop back to the next unit (a close does NOT end the turn)
 
@@ -55,7 +55,7 @@ End-of-turn ceremony         # ALWAYS, when the turn ends:
 Report
 ```
 
-The per-unit steps (Audit → /simplify → Inline codex → Comment cleanup) run
+The per-unit steps (Audit → /simplify → Inline codex → Editor) run
 completely for each unit before you fetch the next; never batch units and review
 them later.
 
@@ -112,33 +112,51 @@ Skill({skill: "skill-codex:codex",
 back past any audit/simplify fix commits that followed). Apply findings, commit
 `Address <unit> codex findings`.
 
-## Comment cleanup (every unit, lightweight)
+## Editor (every unit, lightweight)
 
-Right after the Audit and Simplify (and any Inline codex commit), on the same unit.
-Launch ONE `general-purpose` Agent (Opus) with this prompt verbatim:
+Right after the Audit and Simplify (and any Inline codex commit), on the same
+unit. The Editor cleans the unit's **written content** — code comments **and**
+authored prose (docs, READMEs, docstrings, manifest/skill descriptions,
+user-facing strings). Launch ONE `general-purpose` Agent (Opus) with this
+prompt verbatim:
 
-   > You are a comment auditor. Review the supplied diff for **comments
-   > only**. Delete comments that:
+   > You are an editor. Review the supplied diff's **written content** — both
+   > code comments and any authored prose (markdown, docs, docstrings,
+   > descriptions, user-facing strings). Cut or rewrite text that does not
+   > serve a cold reader landing on this artifact with no memory of how it was
+   > built. Specifically:
+   >
+   > **Comments** — delete those that:
    > - Explain WHAT the code does (well-named identifiers already do).
    > - Narrate the change (`// added for X`, `// removed Y`).
-   > - Reference the task or caller (`// used by X`, `// fixes #123`) —
-   >   these belong in the commit message, not the code.
+   > - Reference the task or caller (`// used by X`, `// fixes #123`) — these
+   >   belong in the commit message, not the code.
    > - Are AI-style "this method does X" docs without non-obvious WHY.
-   > - Leak conversational residue — comments addressed to a reader or
-   >   referencing the chat/session (`// as you requested`, `// here's the
-   >   fix`, `// per our discussion`, `// let me know if…`, `// I changed
-   >   this to…`, `// note for review`).
    >
-   > Keep comments that explain non-obvious WHY: hidden constraints and
-   > subtle invariants; workarounds for specific bugs (cite the bug);
-   > surprising behavior; pinned algorithmic source (paper §refs, vendor
-   > docs).
+   > **Conversational residue / requirements leakage** (comments AND prose) —
+   > delete or rewrite text that exists because of the authoring conversation
+   > rather than the reader's needs: it answers a question nobody asked or
+   > defends a choice nobody challenged (`you do not need to add another
+   > marketplace`, `as requested`, `per our discussion`, `without the user
+   > having to…`, `here's the fix`, `note for review`). The tell: it only
+   > makes sense if you were in the room when it was built.
    >
-   > Output a short bulleted list: file:line, what to delete, why. No
-   > narrative. If clean, say so in one line.
+   > **AI-isms** (comments AND prose) — cut hedging and filler (`it's worth
+   > noting`, `Importantly,`, `Note that`, `This ensures that…`), over-
+   > enthusiasm, marketing tone, and needless meta-commentary.
+   >
+   > **Keep** what serves the reader's task: comments that explain non-obvious
+   > WHY (hidden constraints, subtle invariants, bug workarounds with the bug
+   > cited, surprising behavior, pinned algorithmic source); and prose that is
+   > genuine how-to, a real caveat, or an operational warning. When trimming
+   > docs, prefer neutral, positive phrasing over a defensive "you don't need
+   > to…".
+   >
+   > Output a short bulleted list: file:line, what to delete or rewrite, why.
+   > No narrative. If clean, say so in one line.
 
-Apply deletions (or one-line skips). Commit `Address <unit> comment
-cleanup`; skip the commit if comments are clean.
+Apply deletions/rewrites (or one-line skips). Commit `Address <unit> editor
+pass`; skip the commit if the writing is clean.
 
 ## Mid-turn close (required once a chunk forms)
 
@@ -213,5 +231,5 @@ code-review+codex, flag it — cannot merge); suggested next step.
 - **No safety bypass.** No `--no-verify`, no force ops; fix hook failures
   at the source.
 - **Speak rule.** With a speak hook, narrate only state transitions:
-  entering audit, /simplify, codex, comment cleanup, mid-turn /simplify, the
+  entering audit, /simplify, codex, the Editor, mid-turn /simplify, the
   end-of-turn ceremony, loop done.

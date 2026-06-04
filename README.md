@@ -24,7 +24,8 @@ For every **unit** (one logical commit), right after you commit:
 3. **Inline Codex** *(only on technically hard units — math, crypto,
    concurrency, public contracts)* — a second, different model (OpenAI Codex)
    audits the diff.
-4. **Comment cleanup** — strips narration and AI-residue comments.
+4. **Editor** — cleans the unit's written content (comments *and* prose):
+   strips narration, AI-isms, and conversational/requirements residue.
 
 Once a **chunk** (several units) forms, it's closed with a `/simplify` → Codex
 pass. And every turn ends with the **ceremony**: `/code-review --fix` → Codex
