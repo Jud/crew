@@ -147,8 +147,9 @@ prompt verbatim:
    > **Keep** what serves the reader's task: comments that explain non-obvious
    > WHY (hidden constraints, subtle invariants, bug workarounds with the bug
    > cited, surprising behavior, pinned algorithmic source); and prose that is
-   > genuine how-to, a real caveat, or an operational warning. When trimming
-   > docs, prefer neutral, positive phrasing over defensive constructions.
+   > genuine how-to — including real setup/install steps — a real caveat, or an
+   > operational warning. When trimming docs, prefer neutral, positive phrasing
+   > over defensive constructions.
    >
    > Output a short bulleted list: file:line, what to delete or rewrite, why.
    > No narrative. If clean, say so in one line.

@@ -9,7 +9,7 @@
     {
       "name": "work-loop",
       "source": "./plugins/work-loop",
-      "description": "An iterative development loop — build and review one unit at a time, with chunk- and turn-level review gates (audit + /simplify + cross-model Codex)."
+      "description": "An iterative development loop — build and review one unit at a time (per-unit audit + /simplify), with chunk- and turn-level gates adding cross-model Codex and a /code-review pass."
     },
     {
       "name": "skill-codex",
