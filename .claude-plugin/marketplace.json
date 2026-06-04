@@ -19,7 +19,7 @@
         "path": "plugins/skill-codex",
         "sha": "b322cf0f9abc9d1ffef6989f9de3fdd01638500b"
       },
-      "description": "Delegate prompts to OpenAI Codex CLI — work-loop's cross-model verifier. Re-listed and sha-pinned here so it auto-installs with work-loop; upstream: skills-directory/skill-codex."
+      "description": "Delegate prompts to OpenAI Codex CLI — work-loop's cross-model verifier. Sha-pinned; upstream: skills-directory/skill-codex."
     }
   ]
 }

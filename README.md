@@ -47,8 +47,7 @@ Then invoke it on commit-producing work:
 ```
 
 Installing `work-loop` **auto-installs its dependency, `skill-codex`** (the
-OpenAI Codex bridge), from this same marketplace — you do **not** need to add
-any other marketplace.
+OpenAI Codex bridge) from this same marketplace.
 
 ## Prerequisites
 
