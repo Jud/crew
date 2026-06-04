@@ -70,9 +70,9 @@ claude --plugin-dir ./plugins/work-loop      # load without installing
 /reload-plugins                              # after editing the manifests
 ```
 
-Edits to `skills/work-loop/SKILL.md` take effect immediately in the session;
-changes to the manifests (`plugin.json` / `marketplace.json`) need
-`/reload-plugins`.
+Edits to `skills/work-loop/SKILL.md` take effect immediately in-session;
+manifest changes (`plugin.json` / `marketplace.json`) need `/reload-plugins`
+— run it too if a skill edit doesn't seem to apply.
 
 > **Note:** a `--plugin-dir` load has no marketplace context, so the
 > `skill-codex` dependency is **not** auto-resolved this way. For the Codex
@@ -86,8 +86,11 @@ changes to the manifests (`plugin.json` / `marketplace.json`) need
   no effect on installed users.
 - **The pinned Codex** is locked to an exact commit via the `sha` in
   `.claude-plugin/marketplace.json` (the `skill-codex` entry). This gives
-  reproducible behavior, at the cost of no automatic upstream updates — moving
-  to a newer Codex is a deliberate "bump the sha" chore.
+  reproducible behavior, at the cost of no automatic upstream updates. To move
+  to a newer Codex, bump the `sha`. Note that update detection keys on the
+  `version` string, not the SHA: if the new Codex commit keeps the same
+  `skill-codex` version, existing installs may need a `/plugin` reinstall (or
+  `claude plugin prune`) to pick it up.
 
 ## License
 
