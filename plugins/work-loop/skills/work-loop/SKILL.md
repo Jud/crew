@@ -110,8 +110,8 @@ Skill({skill: "skill-codex:codex",
 
 `<unit-base>` = the parent of your implementation commit (`HEAD~1`, walking
 back past any audit/simplify fix commits that followed). Apply findings, commit
-`Address <unit> inline-codex findings` (the `inline-codex` label keeps this
-per-unit commit from being mistaken for a chunk close — see Mid-turn close).
+`Address <unit> inline-codex review` — labelled `review`, not `findings`, so it
+can't be mistaken for a chunk-close `codex findings` commit (see Mid-turn close).
 
 ## Editor (every unit, lightweight)
 
@@ -170,7 +170,7 @@ ceremony** instead.)
 
 Chunk range = `<last chunk-close commit>..HEAD` — the most recent
 `Address <chunk> codex findings` from a close. A per-unit `Address <unit>
-inline-codex findings` is NOT a close and does not anchor the range
+inline-codex review` is NOT a close and does not anchor the range
 (`origin/main` if no prior close on this branch).
 1. Invoke `/simplify <chunk-range>` → apply (or one-line skips) → commit
    `Address <chunk> simplify findings`.
@@ -184,7 +184,7 @@ The broader, applied pass that closes the turn's **final** chunk:
 `/code-review` also catches correctness bugs, and `--fix` applies findings
 to the tree. Runs once at turn end over the chunk range =
 `<last chunk-close commit>..HEAD` — the most recent `Address <chunk> codex
-findings` from a close, not a per-unit `inline-codex findings` commit
+findings` from a close, not a per-unit `inline-codex review` commit
 (`origin/main` if none).
 
 1. Invoke `/code-review --fix <chunk-range>`, then **follow the loaded skill
