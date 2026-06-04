@@ -9,9 +9,6 @@ audit plus a quality pass. Accumulated units form a chunk, reviewed again a
 different way, with a cross-model review gating the work before it merges. There
 is no upfront planning; the rigor lands continuously, as you build.
 
-The bet: skip the front-loading, iterate fast, harden each unit as it lands — a
-quality artifact instead of a fast mess.
-
 ## What it does
 
 For every **unit** (one logical commit), right after you commit:
@@ -30,8 +27,7 @@ For every **unit** (one logical commit), right after you commit:
 Once a **chunk** (several units) forms, it's closed with a `/simplify` → Codex
 pass. And every turn ends with the **ceremony**: `/code-review --fix` → Codex
 over the whole chunk. That ceremony is the merge gate — Codex runs *after* the
-Claude review specifically to catch what the review itself broke. Cross-model
-verification is the thing this loop has that pure single-model review does not.
+Claude review specifically to catch what the review itself broke.
 
 ## Install
 
@@ -46,8 +42,8 @@ Then invoke it on commit-producing work:
 /work-loop:work-loop [optional unit/chunk label]
 ```
 
-Installing `work-loop` **auto-installs its dependency, `skill-codex`** (the
-OpenAI Codex bridge) from this same marketplace.
+For its Codex passes, `work-loop` depends on the `skill-codex` plugin
+(`skills-directory/skill-codex`) — the bridge it uses to reach OpenAI Codex.
 
 ## Prerequisites
 
@@ -55,7 +51,7 @@ OpenAI Codex bridge) from this same marketplace.
 
 | Dependency | How it's provided | You still need |
 | --- | --- | --- |
-| **`skill-codex`** plugin | Auto-installed with work-loop (declared dependency) | The **Codex CLI** on your `PATH` **and** OpenAI authentication. The plugin is just the bridge — without the CLI + auth, the Codex passes cannot run. |
+| **`skill-codex`** plugin | Installed with work-loop | The **Codex CLI** on your `PATH` **and** OpenAI authentication. The plugin is just the bridge — without the CLI + auth, the Codex passes cannot run. |
 | **`/simplify`**, **`/code-review`** | Built into recent Claude Code | A reasonably current Claude Code version |
 
 > **Heads up:** the single most common failure mode is the Codex passes
