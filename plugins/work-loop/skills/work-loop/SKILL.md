@@ -110,7 +110,8 @@ Skill({skill: "skill-codex:codex",
 
 `<unit-base>` = the parent of your implementation commit (`HEAD~1`, walking
 back past any audit/simplify fix commits that followed). Apply findings, commit
-`Address <unit> codex findings`.
+`Address <unit> inline-codex findings` (the `inline-codex` label keeps this
+per-unit commit from being mistaken for a chunk close — see Mid-turn close).
 
 ## Editor (every unit, lightweight)
 
@@ -163,12 +164,14 @@ pass`; skip the commit if the writing is clean.
 judgement; closing it once it has is not.** The moment accumulated units
 become a chunk and you intend to keep going, you MUST close it before
 starting the next unit — don't let chunks pile up unreviewed. This is the
-lighter, quality-only pass and does **not** end the turn; loop back
-afterward. (The turn's *final* chunk is closed by the **End-of-turn
+lighter close — `/simplify` → codex, without the `/code-review` pass — and
+does **not** end the turn; loop back afterward. (The turn's *final* chunk is closed by the **End-of-turn
 ceremony** instead.)
 
-Chunk range = `<last "Address … codex findings" commit>..HEAD`
-(`origin/main` if none on this branch).
+Chunk range = `<last chunk-close commit>..HEAD` — the most recent
+`Address <chunk> codex findings` from a close. A per-unit `Address <unit>
+inline-codex findings` is NOT a close and does not anchor the range
+(`origin/main` if no prior close on this branch).
 1. Invoke `/simplify <chunk-range>` → apply (or one-line skips) → commit
    `Address <chunk> simplify findings`.
 2. Codex over the range via the `skill-codex:codex` call shown in the
@@ -180,7 +183,9 @@ Chunk range = `<last "Address … codex findings" commit>..HEAD`
 The broader, applied pass that closes the turn's **final** chunk:
 `/code-review` also catches correctness bugs, and `--fix` applies findings
 to the tree. Runs once at turn end over the chunk range =
-`<last "Address … codex findings" commit>..HEAD` (`origin/main` if none).
+`<last chunk-close commit>..HEAD` — the most recent `Address <chunk> codex
+findings` from a close, not a per-unit `inline-codex findings` commit
+(`origin/main` if none).
 
 1. Invoke `/code-review --fix <chunk-range>`, then **follow the loaded skill
    to completion: spawn its reviewer agents and let them produce the
