@@ -1,5 +1,4 @@
 {
-  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "work-loop",
   "description": "Marketplace for the work-loop plugin and its cross-model verifier dependency.",
   "owner": {
@@ -10,9 +9,7 @@
     {
       "name": "work-loop",
       "source": "./plugins/work-loop",
-      "description": "Post-implementation hardening loop — audit + /simplify + cross-model Codex, gated by an end-of-turn /code-review ceremony.",
-      "version": "1.0.0",
-      "category": "development"
+      "description": "Post-implementation hardening loop — audit + /simplify + cross-model Codex, gated by an end-of-turn /code-review ceremony."
     },
     {
       "name": "skill-codex",
@@ -22,9 +19,7 @@
         "path": "plugins/skill-codex",
         "sha": "b322cf0f9abc9d1ffef6989f9de3fdd01638500b"
       },
-      "version": "1.3.0",
-      "description": "Delegate prompts to OpenAI Codex CLI — work-loop's cross-model verifier. Re-listed and sha-pinned here so it auto-installs with work-loop; upstream: skills-directory/skill-codex.",
-      "category": "development"
+      "description": "Delegate prompts to OpenAI Codex CLI — work-loop's cross-model verifier. Re-listed and sha-pinned here so it auto-installs with work-loop; upstream: skills-directory/skill-codex."
     }
   ]
 }
