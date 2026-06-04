@@ -1,10 +1,12 @@
 ---
 name: work-loop
 description: |
-  Post-implementation hardening loop: per-unit audit + /simplify (both
-  mandatory, run separately), optional inline codex on hard units, mid-turn
-  /simplify cleanup, and an end-of-turn ceremony (/code-review --fix → codex).
-  Pass an optional unit/chunk label via $ARGUMENTS.
+  An iterative development loop: build one agent-sized unit at a time,
+  reviewing each as it lands (audit + /simplify, both mandatory, run
+  separately); accumulate units into chunks that get a second, different
+  review (/simplify → codex); close the turn with a /code-review --fix → codex
+  gate. Optional inline codex on hard units. Pass an optional unit/chunk label
+  via $ARGUMENTS.
 allowed-tools: Bash Read Edit Write Agent Skill TaskCreate TaskUpdate TaskList
 ---
 

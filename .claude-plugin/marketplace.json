@@ -9,7 +9,7 @@
     {
       "name": "work-loop",
       "source": "./plugins/work-loop",
-      "description": "Post-implementation hardening loop — audit + /simplify + cross-model Codex, gated by an end-of-turn /code-review ceremony."
+      "description": "An iterative development loop — build and review one unit at a time, with chunk- and turn-level review gates (audit + /simplify + cross-model Codex)."
     },
     {
       "name": "skill-codex",

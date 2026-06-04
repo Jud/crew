@@ -1,7 +1,7 @@
 {
   "name": "work-loop",
   "version": "1.0.0",
-  "description": "Post-implementation hardening loop: per-unit correctness audit + /simplify quality pass, optional inline cross-model Codex on hard units, and an end-of-turn /code-review --fix → Codex ceremony. Fast iteration in, hardened code out.",
+  "description": "An iterative development loop: build one unit at a time and review each as it lands (audit + /simplify), accumulate units into chunks reviewed a different way, and close the turn with a /code-review --fix → Codex gate. Fast iteration in, hardened code out.",
   "author": {
     "name": "Jud Stephenson",
     "email": "jud.stephenson@gmail.com"

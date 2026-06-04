@@ -2,15 +2,15 @@
 
 **Fast iteration in, hardened code out.**
 
-`work-loop` is a Claude Code plugin that wraps a single, opinionated skill: a
-**post-implementation hardening loop**. It doesn't tell the agent *how* to write
-code or impose any upfront planning — it relentlessly *verifies and cleans*
-what was written, one commit at a time, and gates the work behind a
-cross-model review before it can merge.
+`work-loop` is a Claude Code plugin that wraps a single, opinionated skill: an
+**iterative development loop**. You build one unit at a time — the agent decides
+what a unit is — and review each one the moment it's committed (correctness
+audit + quality pass), then review the accumulated chunk a different way. It
+imposes no upfront planning; the rigor is applied continuously as you build, and
+a cross-model review gates the work before it can merge.
 
-The bet: skip the heavyweight front-loading, iterate quickly, and let a
-disciplined back-end loop catch the slop — so you get a quality artifact at the
-end instead of a fast mess.
+The bet: skip the heavyweight front-loading, iterate fast, and harden each unit
+as it lands — so you get a quality artifact instead of a fast mess.
 
 ## What it does
 
