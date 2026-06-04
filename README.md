@@ -4,13 +4,13 @@
 
 `work-loop` is a Claude Code plugin that wraps a single, opinionated skill: an
 **iterative development loop**. You build one unit at a time — the agent decides
-what a unit is — and review each one the moment it's committed (correctness
-audit + quality pass), then review the accumulated chunk a different way. It
-imposes no upfront planning; the rigor is applied continuously as you build, and
-a cross-model review gates the work before it can merge.
+what counts as a unit — and review each the moment it's committed: a correctness
+audit plus a quality pass. Accumulated units form a chunk, reviewed again a
+different way, with a cross-model review gating the work before it merges. There
+is no upfront planning; the rigor lands continuously, as you build.
 
-The bet: skip the heavyweight front-loading, iterate fast, and harden each unit
-as it lands — so you get a quality artifact instead of a fast mess.
+The bet: skip the front-loading, iterate fast, harden each unit as it lands — a
+quality artifact instead of a fast mess.
 
 ## What it does
 

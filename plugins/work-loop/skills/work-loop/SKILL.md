@@ -3,10 +3,10 @@ name: work-loop
 description: |
   An iterative development loop: build one agent-sized unit at a time,
   reviewing each as it lands (audit + /simplify, both mandatory, run
-  separately); accumulate units into chunks that get a second, different
-  review (/simplify → codex); close the turn with a /code-review --fix → codex
-  gate. Optional inline codex on hard units. Pass an optional unit/chunk label
-  via $ARGUMENTS.
+  separately); accumulate units into chunks, each closed mid-turn with
+  /simplify → codex; close the turn's final chunk with a /code-review --fix →
+  codex gate. Optional inline codex on hard units. Pass an optional unit/chunk
+  label via $ARGUMENTS.
 allowed-tools: Bash Read Edit Write Agent Skill TaskCreate TaskUpdate TaskList
 ---
 
@@ -123,8 +123,7 @@ prompt verbatim:
    > You are an editor. Review the supplied diff's **written content** — both
    > code comments and any authored prose (markdown, docs, docstrings,
    > descriptions, user-facing strings). Cut or rewrite text that does not
-   > serve a cold reader landing on this artifact with no memory of how it was
-   > built. Specifically:
+   > serve a cold reader of this artifact. Specifically:
    >
    > **Comments** — delete those that:
    > - Explain WHAT the code does (well-named identifiers already do).
@@ -149,8 +148,7 @@ prompt verbatim:
    > WHY (hidden constraints, subtle invariants, bug workarounds with the bug
    > cited, surprising behavior, pinned algorithmic source); and prose that is
    > genuine how-to, a real caveat, or an operational warning. When trimming
-   > docs, prefer neutral, positive phrasing over a defensive "you don't need
-   > to…".
+   > docs, prefer neutral, positive phrasing over defensive constructions.
    >
    > Output a short bulleted list: file:line, what to delete or rewrite, why.
    > No narrative. If clean, say so in one line.
