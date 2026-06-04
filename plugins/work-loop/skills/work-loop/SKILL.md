@@ -121,39 +121,35 @@ authored prose (docs, READMEs, docstrings, manifest/skill descriptions,
 user-facing strings). Launch ONE `general-purpose` Agent (Opus) with this
 prompt verbatim:
 
-   > You are an editor. Review the supplied diff's **written content** — both
-   > code comments and any authored prose (markdown, docs, docstrings,
-   > descriptions, user-facing strings). Cut or rewrite text that does not
-   > serve a cold reader of this artifact. Specifically:
+   > You are an editor. Review the supplied diff's **written content** — code
+   > comments and any authored prose (markdown, docs, docstrings, manifest/
+   > skill descriptions, user-facing strings). Cut what serves the writing
+   > rather than the reader; keep what the reader's task needs.
    >
-   > **Comments** — delete those that:
-   > - Explain WHAT the code does (well-named identifiers already do).
-   > - Narrate the change (`// added for X`, `// removed Y`).
-   > - Reference the task or caller (`// used by X`, `// fixes #123`) — these
-   >   belong in the commit message, not the code.
-   > - Are AI-style "this method does X" docs without non-obvious WHY.
+   > **Comments** — delete those that explain WHAT the code does (well-named
+   > identifiers already say it), narrate the change, reference the task or a
+   > collaborator, or are AI-style "this does X" docs without a non-obvious WHY.
    >
-   > **Conversational residue / requirements leakage** (comments AND prose) —
-   > delete or rewrite text that exists because of the authoring conversation
-   > rather than the reader's needs: it answers a question nobody asked or
-   > defends a choice nobody challenged (`you do not need to add another
-   > marketplace`, `as requested`, `per our discussion`, `without the user
-   > having to…`, `here's the fix`, `note for review`). The tell: it only
-   > makes sense if you were in the room when it was built.
+   > **Prose** — cut three shapes:
+   > - **Automatic / default behavior** — narration of what the tooling does on
+   >   its own, which the reader neither triggers nor handles (for example, a
+   >   note that a package manager auto-installs a declared dependency tells the
+   >   reader nothing they didn't already assume). Where such narration wraps a
+   >   genuine fact, rewrite to keep the fact and drop the mechanics.
+   > - **Conversational residue** — traces of how the artifact was built, not
+   >   what the reader needs: answers to questions nobody asked, choices
+   >   defended that nobody challenged, or asides to a collaborator. The tell:
+   >   it only makes sense if you were in the room when it was written.
+   > - **Filler** — hedging, throat-clearing, marketing tone, or meta-commentary
+   >   that carries no information and changes nothing the reader knows or does.
    >
-   > **AI-isms** (comments AND prose) — cut hedging and filler (`it's worth
-   > noting`, `Importantly,`, `Note that`, `This ensures that…`), over-
-   > enthusiasm, marketing tone, and needless meta-commentary.
+   > **Keep** what the reader's task needs: the steps and commands they run,
+   > real prerequisites, real caveats (especially surprising departures from
+   > what they'd assume), and non-obvious WHY — including a genuine caveat or
+   > fact sitting next to text you cut.
    >
-   > **Keep** what serves the reader's task: comments that explain non-obvious
-   > WHY (hidden constraints, subtle invariants, bug workarounds with the bug
-   > cited, surprising behavior, pinned algorithmic source); and prose that is
-   > genuine how-to — including real setup/install steps — a real caveat, or an
-   > operational warning. When trimming docs, prefer neutral, positive phrasing
-   > over defensive constructions.
-   >
-   > Output a short bulleted list: file:line, what to delete or rewrite, why.
-   > No narrative. If clean, say so in one line.
+   > Output a short bulleted list: file:line, what to cut or rewrite, why. If
+   > clean, say so in one line.
 
 Apply deletions/rewrites (or one-line skips). Commit `Address <unit> editor
 pass`; skip the commit if the writing is clean.
