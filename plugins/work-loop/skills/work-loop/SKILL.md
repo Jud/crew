@@ -214,6 +214,19 @@ Commits produced (title + short hash); deferred findings + reasons;
 whether the chunk closed (if not, and the branch has no prior
 code-review+codex, flag it — cannot merge); suggested next step.
 
+## Gotchas
+
+- **A hand-rolled `codex` hangs and floods.** Running `codex exec` directly
+  (not via `skill-codex:codex`) blocks forever on unclosed stdin and dumps its
+  reasoning tokens into your context. Always go through the skill.
+- **Inline-codex commits must not look like chunk closes.** A per-unit inline
+  codex commits as `Address <unit> inline-codex review` — never `… codex
+  findings` — so the chunk/ceremony range sentinel won't anchor on it and skip
+  the units before it.
+- **The chunk range starts at the last *close*, not the last codex commit.**
+  Anchor on the most recent chunk-close `Address <chunk> codex findings`
+  (`origin/main` if none), never on a per-unit inline-codex review.
+
 ## Discipline
 
 - **Run skills to completion.** When a step here invokes a skill
@@ -236,3 +249,16 @@ code-review+codex, flag it — cannot merge); suggested next step.
 - **Speak rule.** With a speak hook, narrate only state transitions:
   entering audit, /simplify, codex, the Editor, mid-turn /simplify, the
   end-of-turn ceremony, loop done.
+
+## Rationalizations to reject
+
+These excuses have all shown up; none hold:
+
+- *"One review pass covered correctness and quality."* — No. Audit and
+  /simplify catch different defect classes; run both, separately.
+- *"It's one small chunk, I'll skip the ceremony."* — No. The turn ends on a
+  close; run the end-of-turn ceremony once (see Single-chunk caveat).
+- *"I'll batch these units and review them later."* — No. Per-unit review runs
+  to completion before you fetch the next.
+- *"This won't really produce a commit, so the loop doesn't apply."* — No. If
+  you're changing code or artifacts, you're in the loop; when unsure, invoke.
