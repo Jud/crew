@@ -1,9 +1,9 @@
 ---
 name: auditor
 description: >-
-  Correctness-only review of a committed diff range. Spawned per unit by
-  /crew:flow, and runnable on its own. Pass a git range (e.g. HEAD~1..HEAD or
-  origin/main..HEAD) plus optional intent via $ARGUMENTS.
+  Correctness-only review of a committed diff range — also runnable on its
+  own. Pass a git range (e.g. HEAD~1..HEAD or origin/main..HEAD) plus optional
+  intent via $ARGUMENTS.
 context: fork
 disable-model-invocation: true
 allowed-tools: Bash Read Grep Glob
