@@ -14,6 +14,7 @@
     --line:rgba(26,23,20,.14);
   }
   *{margin:0;padding:0;box-sizing:border-box}
+  :focus-visible{outline:3px solid var(--ox);outline-offset:3px;border-radius:2px}
   html{scroll-behavior:smooth}
   body{
     background:var(--cream); color:var(--ink);
@@ -73,7 +74,7 @@
     font-family:'Space Mono',monospace; font-size:.72rem; letter-spacing:.2em;
     text-transform:uppercase; color:var(--stone); opacity:.0; animation:fadecue 1s ease 1.4s forwards;
   }
-  @keyframes fadecue{to{opacity:.7}}
+  @keyframes fadecue{to{opacity:1}}
 
   /* copy-install pill */
   .copy{
@@ -154,7 +155,7 @@
   .reveal.in{opacity:1;transform:none}
   @media(prefers-reduced-motion:reduce){
     .reveal{opacity:1;transform:none;transition:none}
-    .hero .scrollcue{animation:none;opacity:.7}
+    .hero .scrollcue{animation:none;opacity:1}
     html{scroll-behavior:auto}
   }
 </style>
