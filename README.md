@@ -83,9 +83,9 @@ Edits to a skill's `SKILL.md` take effect immediately in-session; manifest
 changes (`plugin.json` / `marketplace.json`) need `/reload-plugins` — run it too
 if a skill edit doesn't seem to apply.
 
-> **Note:** a local load has no marketplace context for the dependency, so
-> install `skill-codex` separately for the Codex passes to run during local
-> dev.
+> **Note:** the `--plugin-dir` form has no marketplace context, so it won't
+> resolve the `skill-codex` dependency — install it separately for the Codex
+> passes to run. (The marketplace-add form above resolves it the normal way.)
 
 ## Updating
 

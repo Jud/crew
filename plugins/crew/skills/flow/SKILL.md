@@ -119,13 +119,15 @@ authored prose (docs, READMEs, docstrings, manifest/skill descriptions,
 user-facing strings). Invoke the **`/crew:editor` skill** via the Skill tool:
 
    ```
-   Skill({skill: "crew:editor", args: "<unit-range> <intent>"})
+   Skill({skill: "crew:editor", args: "<unit-base>..HEAD <intent>"})
    ```
 
-The forked editor fetches its own diff and returns cut/rewrite findings
-(`<unit-range>`/`<intent>` as in the Audit step). Apply deletions/rewrites (or
-one-line skips). Commit `Address <unit> editor pass`; skip the commit if the
-writing is clean.
+`<unit-base>` is the parent of the unit's implementation commit — walk back
+past the audit/simplify/inline-codex fix commits, as in Inline codex — so the
+editor sees the unit's full written content, not just the latest fix
+(`<intent>` as in the Audit step). The forked editor fetches its own diff and
+returns cut/rewrite findings. Apply deletions/rewrites (or one-line skips).
+Commit `Address <unit> editor pass`; skip the commit if the writing is clean.
 
 ## Mid-turn close (required once a chunk forms)
 

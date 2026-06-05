@@ -9,7 +9,7 @@
     {
       "name": "crew",
       "source": "./plugins/crew",
-      "description": "An iterative development loop — build and review one unit at a time (per-unit audit + /simplify), with chunk- and turn-level gates adding cross-model Codex and a /code-review pass."
+      "description": "An iterative development loop as three skills — flow (the loop), auditor (correctness), editor (written-content) — reviewing each unit as it lands, with chunk- and turn-level gates adding cross-model Codex and a /code-review pass."
     },
     {
       "name": "skill-codex",
