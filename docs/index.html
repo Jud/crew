@@ -46,9 +46,10 @@
     background:rgba(244,240,230,.85);
     backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
     border-bottom:1px solid var(--line);
-    opacity:0; pointer-events:none; transition:opacity .35s ease;
+    transition:opacity .35s ease;
   }
-  nav.show{opacity:1; pointer-events:auto}
+  .js nav{opacity:0; pointer-events:none}
+  .js nav.show{opacity:1; pointer-events:auto}
   nav .brand{font-family:'Saira Condensed',sans-serif;font-weight:800;font-size:1.6rem;
     color:var(--ox);transform:skewX(-12deg);letter-spacing:-.02em}
   nav .gh{font-family:'Space Mono',monospace;font-size:.82rem;font-weight:700;
@@ -180,7 +181,7 @@
   <p class="eyebrow">// a claude code plugin</p>
   <h1><span class="wm">crew</span></h1>
   <p class="tag">The new way<br>to build.</p>
-  <p class="sub">Your crew builds your vision for real — reviewing every commit as it lands, hardening it with a second model — so what ships actually holds. You stay in the vibe; the crew sweats the build.</p>
+  <p class="sub">Your crew builds your vision for real — reviewing every commit as it lands, then bringing in a second model to harden it — so what ships actually holds. You stay in the vibe; the crew sweats the build.</p>
   <div class="cta">
     <a class="cta-btn" href="#install">Get the crew ↓</a>
   </div>
@@ -195,7 +196,7 @@
         <h2 class="lead reveal">You bring the <em>vision</em>.</h2>
       </div>
       <div class="right">
-        <p class="body reveal">You don't grind through the build — you set the direction, and the crew does the rest, reviewing every commit the moment it lands.</p>
+        <p class="body reveal">The crew does the heavy lifting — you set the direction, it writes the code and reviews every commit the moment it lands.</p>
         <p class="body reveal">A correctness audit, a quality pass, an editorial sweep — the rigor never stops, and never slows you down.</p>
       </div>
     </div>
@@ -232,7 +233,7 @@
       </div>
       <div class="right">
         <p class="body reveal">Most review tools ask one model to grade its own homework. crew doesn't.</p>
-        <p class="body reveal">As the crew builds, the <b>specialist</b> brings in <b>OpenAI Codex</b> — a different model, different blind spots — to cross-check the work and catch what Claude missed. That's the bar every chunk has to clear.</p>
+        <p class="body reveal">As the crew builds, the <b>specialist</b> brings in <b>OpenAI Codex</b> — a different model, different blind spots — to cross-check each chunk and catch what Claude missed. Every turn then closes with a full <code>/code-review</code> on top.</p>
         <p class="body reveal">What ships has been audited, simplified, edited, and cross-examined.</p>
       </div>
     </div>
@@ -268,6 +269,8 @@
 </footer>
 
 <script>
+  document.documentElement.classList.add('js');
+
   // scroll reveal
   var io = new IntersectionObserver(function(es){
     es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
