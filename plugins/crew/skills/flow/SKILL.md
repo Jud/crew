@@ -78,10 +78,12 @@ running one is not a substitute for the other.
    Skill({skill: "crew:auditor", args: "<unit-range> <intent>"})
    ```
 
-   `<unit-range>` is `HEAD~1..HEAD`; `<intent>` is the unit's stated purpose
-   (from `$ARGUMENTS`). The auditor fetches its own diff and returns
-   correctness findings only. Apply findings (or one-line skip reasons).
-   Commit `Address <unit> audit findings` (no empty commits).
+   `<unit-range>` is `HEAD~1..HEAD`; `<intent>` is a brief plain-text
+   description of what this unit changes and why — free prose, not flow's
+   chunk-label `$ARGUMENTS` (the sub-skill reads the first token as the range
+   and everything after it as intent). The auditor fetches its own diff and
+   returns correctness findings only. Apply findings (or one-line skip
+   reasons). Commit `Address <unit> audit findings` (no empty commits).
 
 3. **Simplify (quality).** Skip if trivial (same threshold). Otherwise
    invoke the **literal `/simplify <unit-range>` skill** via the Skill
