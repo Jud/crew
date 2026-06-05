@@ -103,11 +103,11 @@ a public contract (soundness / relation logic, wire formats, public APIs,
 error envelopes). Routine units skip it; the ceremony codex covers them.
 
 Scope to the whole unit so far — implementation **plus** the audit/simplify
-fixes — via the **`skill-codex:codex` skill, never the raw `codex` CLI:**
+fixes. Call **`/crew:specialist`** — the crew's cross-model gate; it brings in
+Codex (never the raw `codex` CLI) with the locked defaults:
 
 ```
-Skill({skill: "skill-codex:codex",
-       args: "Review the committed diff <unit-base>..HEAD for correctness, security, and contract bugs. gpt-5.5, xhigh, read-only — don't prompt for these. Findings only; no edits."})
+Skill({skill: "crew:specialist", args: "<unit-base>..HEAD"})
 ```
 
 `<unit-base>..HEAD` is the whole unit so far (see step 1). Apply findings, commit
@@ -146,9 +146,8 @@ inline-codex review` is NOT a close and does not anchor the range
 (`origin/main` if no prior close on this branch).
 1. Invoke `/simplify <chunk-range>` → apply (or one-line skips) → commit
    `Address <chunk> simplify findings`.
-2. Codex over the range via the `skill-codex:codex` call shown in the
-   end-of-turn ceremony → commit `Address <chunk> codex findings`. Loop
-   back; don't end the turn.
+2. Run `/crew:specialist <chunk-range>` (the cross-model gate) → commit
+   `Address <chunk> codex findings`. Loop back; don't end the turn.
 
 ## End-of-turn ceremony (ALWAYS — when the turn ends)
 
@@ -162,10 +161,9 @@ findings` from a close, not a per-unit `inline-codex review` commit
 1. Invoke `/code-review --fix <chunk-range>`, then **follow the loaded skill
    to completion: spawn its reviewer agents and let them produce the
    findings.** Commit `Address <chunk> code-review findings`.
-2. Codex over the range, never the raw CLI:
+2. Run the cross-model gate via `/crew:specialist`:
    ```
-   Skill({skill: "skill-codex:codex",
-          args: "Review the committed diff <chunk-range> for correctness, security, and contract bugs. gpt-5.5, xhigh, read-only — don't prompt. Findings only; no edits."})
+   Skill({skill: "crew:specialist", args: "<chunk-range>"})
    ```
    Apply findings, commit `Address <chunk> codex findings`, then go to
    Report.
@@ -193,8 +191,9 @@ code-review+codex, flag it — cannot merge); suggested next step.
 ## Gotchas
 
 - **A hand-rolled `codex` hangs and floods.** Running `codex exec` directly
-  (not via `skill-codex:codex`) blocks forever on unclosed stdin and dumps its
-  reasoning tokens into your context. Always go through the skill.
+  (not via `/crew:specialist`, which goes through `skill-codex`) blocks forever
+  on unclosed stdin and dumps its reasoning tokens into your context. Always go
+  through the specialist.
 - **Inline-codex commits must not look like chunk closes.** A per-unit inline
   codex commits as `Address <unit> inline-codex review` — never `… codex
   findings` — so the chunk/ceremony range sentinel won't anchor on it and skip
@@ -206,7 +205,7 @@ code-review+codex, flag it — cannot merge); suggested next step.
 ## Discipline
 
 - **Run skills to completion.** When a step here invokes a skill
-  (`/code-review`, `/simplify`, `skill-codex:codex`, `/crew:auditor`,
+  (`/code-review`, `/simplify`, `/crew:specialist`, `/crew:auditor`,
   `/crew:editor`), that is mandatory, not a judgment call — invoke it and run
   its procedure verbatim with your own tool calls, then report what it
   produced.
@@ -214,11 +213,11 @@ code-review+codex, flag it — cannot merge); suggested next step.
 - **Audit and /simplify are both mandatory, run separately.** Never merge
   them into one pass — Audit is correctness, /simplify is quality; each is a
   distinct run with its own findings commit.
-- **Codex only via `skill-codex:codex`**, never the raw CLI — the skill gives
-  you session **resume** and keeps codex's reasoning tokens out of your
-  context (see Gotchas for why a hand-rolled call hangs and floods). It runs
-  AFTER the review pass (to catch what that pass broke), scoped to the diff
-  range, with the gpt-5.5 / xhigh / read-only default.
+- **Codex only via `/crew:specialist`** (which goes through `skill-codex`),
+  never the raw CLI — the specialist owns the gpt-5.5 / xhigh / read-only
+  defaults and keeps codex's reasoning tokens out of your context (see Gotchas
+  for why a hand-rolled call hangs and floods). It runs AFTER the review pass,
+  to catch what that pass broke.
 - **Honest ROI.** Skip findings with one-line reasons; don't argue.
 - **No safety bypass.** No `--no-verify`, no force ops; fix hook failures
   at the source.
