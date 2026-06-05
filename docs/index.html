@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>crew — fast iteration in, hardened code out</title>
+<meta name="description" content="crew is a Claude Code plugin: build one commit at a time, review every one as it lands, and let a second model cross-check the work before it ships.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@600;700;800;900&family=Space+Mono:wght@400;700&family=Inter:wght@400;450;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#F4F0E6; --ox:#6E2A24; --ink:#1A1714; --stone:#6E6258;
+    --line:rgba(26,23,20,.14);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--cream); color:var(--ink);
+    font-family:'Inter',system-ui,sans-serif; font-weight:450;
+    line-height:1.55; -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  .wrap{max-width:1180px; margin:0 auto; padding:0 32px}
+  a{color:inherit}
+
+  /* mono eyebrow label */
+  .eyebrow{
+    font-family:'Space Mono',monospace; font-size:.8rem; font-weight:700;
+    letter-spacing:.18em; text-transform:uppercase; color:var(--ox);
+  }
+
+  /* wordmark */
+  .wm{
+    font-family:'Saira Condensed',sans-serif; font-weight:800;
+    color:var(--ox); transform:skewX(-12deg); letter-spacing:-.02em;
+    line-height:.86; display:inline-block;
+  }
+
+  /* ---- nav ---- */
+  nav{
+    position:fixed; top:0; left:0; right:0; z-index:10;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:20px 32px; mix-blend-mode:multiply;
+  }
+  nav .brand{font-family:'Saira Condensed',sans-serif;font-weight:800;font-size:1.6rem;
+    color:var(--ox);transform:skewX(-12deg);letter-spacing:-.02em}
+  nav .gh{font-family:'Space Mono',monospace;font-size:.82rem;font-weight:700;
+    letter-spacing:.04em;text-decoration:none;border-bottom:2px solid transparent;
+    padding-bottom:2px;transition:border-color .2s}
+  nav .gh:hover{border-color:var(--ox)}
+
+  /* ---- hero ---- */
+  header.hero{
+    min-height:100vh; display:flex; flex-direction:column; justify-content:center;
+    padding:120px 0 80px; position:relative;
+  }
+  .hero .eyebrow{margin-bottom:28px}
+  .hero h1{margin:0; line-height:.82}
+  .hero h1 .wm{font-size:clamp(6rem,21vw,19rem)}
+  .hero .tag{
+    font-family:'Saira Condensed',sans-serif; font-weight:600;
+    font-size:clamp(1.6rem,4.4vw,3.1rem); line-height:1.04; color:var(--ink);
+    margin-top:36px; max-width:16ch;
+  }
+  .hero .sub{
+    font-size:clamp(1rem,1.5vw,1.18rem); color:var(--ink); max-width:46ch;
+    margin-top:26px;
+  }
+  .hero .cta{display:flex; align-items:center; gap:24px; margin-top:44px; flex-wrap:wrap}
+  .hero .scrollcue{
+    position:absolute; bottom:34px; left:50%; transform:translateX(-50%);
+    font-family:'Space Mono',monospace; font-size:.72rem; letter-spacing:.2em;
+    text-transform:uppercase; color:var(--stone); opacity:.0; animation:fadecue 1s ease 1.4s forwards;
+  }
+  @keyframes fadecue{to{opacity:.7}}
+
+  /* copy-install pill */
+  .copy{
+    display:inline-flex; align-items:center; gap:14px; cursor:pointer;
+    background:var(--ink); color:var(--cream); border:none;
+    font-family:'Space Mono',monospace; font-size:.92rem; font-weight:400;
+    padding:15px 20px; border-radius:2px; transition:transform .15s, background .2s;
+  }
+  .copy:hover{transform:translateY(-2px)}
+  .copy .cmd::before{content:"$ "; color:#C99}
+  .copy .ic{font-size:.74rem; letter-spacing:.12em; text-transform:uppercase;
+    color:#C99; border-left:1px solid rgba(244,240,230,.25); padding-left:14px}
+  .copy.copied .ic{color:#9CB58A}
+  .textlink{font-family:'Space Mono',monospace;font-size:.86rem;font-weight:700;
+    text-decoration:none;border-bottom:2px solid var(--ox);padding-bottom:3px;
+    color:var(--ink);transition:opacity .2s}
+  .textlink:hover{opacity:.6}
+
+  /* ---- sections ---- */
+  section{padding:120px 0; border-top:1px solid var(--line)}
+  .lead{font-size:clamp(2.4rem,6vw,5.2rem);font-family:'Saira Condensed',sans-serif;
+    font-weight:700;line-height:.98;letter-spacing:-.01em;max-width:18ch;margin-top:26px}
+  .lead em{font-style:normal;color:var(--ox)}
+  .body{font-size:clamp(1.05rem,1.5vw,1.25rem);max-width:54ch;margin-top:30px;color:#34302B}
+  .body + .body{margin-top:18px}
+
+  /* split layout */
+  .split{display:grid;grid-template-columns:minmax(0,1fr);gap:14px}
+  @media(min-width:820px){.split{grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:60px;align-items:start}
+    .split .right{padding-top:8px}}
+
+  /* crew list */
+  .crew{margin-top:50px;border-top:1px solid var(--line)}
+  .crew .row{display:grid;grid-template-columns:1fr;gap:6px;padding:34px 0;
+    border-bottom:1px solid var(--line);transition:padding-left .25s}
+  @media(min-width:760px){.crew .row{grid-template-columns:minmax(0,4fr) minmax(0,8fr);
+    gap:40px;align-items:baseline}}
+  .crew .row:hover{padding-left:14px}
+  .crew .nm{font-family:'Saira Condensed',sans-serif;font-weight:800;
+    font-size:clamp(2rem,4vw,3.2rem);color:var(--ox);transform:skewX(-12deg);
+    letter-spacing:-.01em;line-height:1}
+  .crew .nm small{display:block;transform:skewX(12deg);font-family:'Space Mono',monospace;
+    font-size:.72rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--stone);margin-top:12px}
+  .crew .ds{font-size:clamp(1.05rem,1.6vw,1.35rem);color:#34302B;line-height:1.4}
+
+  /* install block */
+  .install-cmds{margin-top:40px;display:flex;flex-direction:column;gap:14px;align-items:flex-start}
+  .note{font-size:.98rem;color:var(--stone);max-width:52ch;margin-top:34px;line-height:1.6}
+  .note b{color:var(--ink)}
+
+  /* footer */
+  footer{border-top:1px solid var(--line);padding:60px 0 70px;
+    display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:24px}
+  footer .wm{font-size:3.2rem}
+  footer .meta{font-family:'Space Mono',monospace;font-size:.8rem;color:var(--stone);
+    letter-spacing:.04em;text-align:right;line-height:1.9}
+  footer .meta a{text-decoration:none;border-bottom:1px solid var(--line)}
+
+  /* ---- mobile ---- */
+  @media(max-width:560px){
+    .wrap{padding:0 22px}
+    nav{padding:16px 22px}
+    .hero h1 .wm{font-size:clamp(4rem,19vw,7rem)}
+    .hero .tag,.hero .sub,.body,.note,.lead{max-width:100%}
+    .hero .cta{gap:16px}
+    .copy{width:100%;flex-wrap:wrap;justify-content:flex-start;font-size:.8rem;padding:14px 16px}
+    .copy .cmd{white-space:normal;word-break:break-word}
+    .copy .ic{padding-left:12px}
+    section{padding:84px 0}
+    .crew .row:hover{padding-left:0}
+    footer{flex-direction:column;align-items:flex-start;gap:28px}
+    footer .meta{text-align:left}
+  }
+
+  /* reveal interaction */
+  .reveal{opacity:0;transform:translateY(26px);transition:opacity .7s ease,transform .7s ease}
+  .reveal.in{opacity:1;transform:none}
+  @media(prefers-reduced-motion:reduce){
+    .reveal{opacity:1;transform:none;transition:none}
+    .hero .scrollcue{animation:none;opacity:.7}
+    html{scroll-behavior:auto}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <span class="brand">crew</span>
+  <a class="gh" href="https://github.com/Jud/crew">GitHub →</a>
+</nav>
+
+<header class="hero wrap">
+  <p class="eyebrow">// a claude code plugin</p>
+  <h1><span class="wm">crew</span></h1>
+  <p class="tag">Fast iteration in,<br>hardened code out.</p>
+  <p class="sub">Build one commit at a time — no upfront plan. crew reviews every commit as it lands, then a second model checks the work before it ships.</p>
+  <div class="cta">
+    <button class="copy" data-cmd="/plugin install crew@crew" aria-label="Copy install command">
+      <span class="cmd">/plugin install crew@crew</span>
+      <span class="ic" aria-hidden="true">copy</span>
+    </button>
+    <a class="textlink" href="#install">how it works ↓</a>
+  </div>
+  <span class="scrollcue" aria-hidden="true">scroll</span>
+</header>
+
+<main>
+  <section class="wrap">
+    <div class="split">
+      <div class="left">
+        <p class="eyebrow reveal">// the idea</p>
+        <h2 class="lead reveal">You'd rather <em>build</em> than plan.</h2>
+      </div>
+      <div class="right">
+        <p class="body reveal">So don't. Write code the way you actually think — one commit at a time, no design doc, no checklist to forget halfway through.</p>
+        <p class="body reveal">crew rides along. The moment a commit lands, it's reviewed: a correctness audit, a quality pass, an editorial sweep. The rigor arrives continuously, while you stay in flow.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap">
+    <p class="eyebrow reveal">// the crew</p>
+    <h2 class="lead reveal">Three skills.<br>One <em>loop</em>.</h2>
+    <div class="crew">
+      <div class="row reveal">
+        <div class="nm">flow<small>// the loop</small></div>
+        <div class="ds">Drives build → review for every commit, every chunk, every turn. Calls the rest of the crew for you.</div>
+      </div>
+      <div class="row reveal">
+        <div class="nm">auditor<small>// correctness</small></div>
+        <div class="ds">A correctness-only review of any diff — logic errors, edge cases, broken contracts, intent drift.</div>
+      </div>
+      <div class="row reveal">
+        <div class="nm">editor<small>// the prose</small></div>
+        <div class="ds">Strips AI-isms, narration, and conversational residue out of your comments and docs.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap">
+    <div class="split">
+      <div class="left">
+        <p class="eyebrow reveal">// the gate</p>
+        <h2 class="lead reveal">A <em>second model</em> checks the work.</h2>
+      </div>
+      <div class="right">
+        <p class="body reveal">Most review tools ask one model to grade its own homework. crew doesn't.</p>
+        <p class="body reveal">After Claude audits and simplifies a change, <b>OpenAI Codex</b> reviews it with fresh eyes — a different model, different blind spots — specifically to catch what the first pass missed. That cross-model gate is the merge bar.</p>
+        <p class="body reveal">You move fast and loose. What comes out has been audited, simplified, edited, and cross-examined.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap" id="install">
+    <p class="eyebrow reveal">// get in flow</p>
+    <h2 class="lead reveal">Bring your <em>crew</em>.</h2>
+    <div class="install-cmds">
+      <button class="copy reveal" data-cmd="/plugin marketplace add Jud/crew" aria-label="Copy marketplace command">
+        <span class="cmd">/plugin marketplace add Jud/crew</span>
+        <span class="ic" aria-hidden="true">copy</span>
+      </button>
+      <button class="copy reveal" data-cmd="/plugin install crew@crew" aria-label="Copy install command">
+        <span class="cmd">/plugin install crew@crew</span>
+        <span class="ic" aria-hidden="true">copy</span>
+      </button>
+      <button class="copy reveal" data-cmd="/crew:flow" aria-label="Copy run command">
+        <span class="cmd">/crew:flow</span>
+        <span class="ic" aria-hidden="true">copy</span>
+      </button>
+    </div>
+    <p class="note reveal"><b>One prerequisite.</b> crew's cross-model gate runs the real OpenAI Codex CLI. The bridge to it installs with crew, but the CLI is yours to provide — the <code>codex</code> command on your <code>PATH</code>, plus OpenAI auth. Without it, the Codex passes skip and everything else still runs.</p>
+  </section>
+</main>
+
+<footer class="wrap">
+  <span class="wm">crew</span>
+  <div class="meta">
+    fast iteration in, hardened code out<br>
+    <a href="https://github.com/Jud/crew">github.com/Jud/crew</a> · MIT
+  </div>
+</footer>
+
+<script>
+  // micro-interaction 1 — scroll reveal
+  var io = new IntersectionObserver(function(es){
+    es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, {threshold:.16, rootMargin:'0px 0px -8% 0px'});
+  document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
+
+  // micro-interaction 2 — copy install command
+  document.querySelectorAll('.copy').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var cmd = btn.getAttribute('data-cmd');
+      navigator.clipboard && navigator.clipboard.writeText(cmd);
+      var ic = btn.querySelector('.ic');
+      var prev = ic.textContent;
+      btn.classList.add('copied'); ic.textContent = 'copied ✓';
+      setTimeout(function(){ btn.classList.remove('copied'); ic.textContent = prev; }, 1600);
+    });
+  });
+</script>
+</body>
+</html>
