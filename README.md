@@ -1,28 +1,35 @@
-# work-loop
+# crew
 
 **Fast iteration in, hardened code out.**
 
-`work-loop` is a Claude Code plugin that wraps a single, opinionated skill: an
-**iterative development loop**. You build one unit at a time — the agent decides
-what counts as a unit — and review each the moment it's committed: a correctness
-audit plus a quality pass. Accumulated units form a chunk, reviewed again a
-different way, with a cross-model review gating the work before it merges. There
-is no upfront planning; the rigor lands continuously, as you build.
+`crew` is a Claude Code plugin: an iterative development loop with a review
+crew built in. You build one unit at a time — the agent decides what counts as
+a unit — and review each the moment it's committed. There's no upfront
+planning; the rigor lands continuously, as you build.
 
-## What it does
+The crew is three skills:
+
+- **`/crew:flow`** — the loop. Drives build → review for every unit, and closes
+  each chunk and the turn with deeper gates.
+- **`/crew:auditor`** — a correctness-only review of a diff range. Flow spawns
+  it per unit; also runnable on its own.
+- **`/crew:editor`** — an editorial pass over a diff's written content (comments
+  *and* prose). Flow calls it per unit; also runnable on its own.
+
+## The loop
 
 For every **unit** (one logical commit), right after you commit:
 
-1. **Audit** — a correctness-only pass (spawned subagent): logic errors, edge
-   cases, broken contracts, intent mismatch.
-2. **/simplify** — a separate quality-only pass: reuse, simplification,
-   efficiency, altitude. (Run as a *distinct* step — correctness and quality
-   catch different things.)
+1. **Audit** (`/crew:auditor`) — correctness only: logic errors, edge cases,
+   broken contracts, intent mismatch.
+2. **/simplify** — a separate quality pass: reuse, simplification, efficiency,
+   altitude. (Distinct from the audit — correctness and quality catch different
+   things.)
 3. **Inline Codex** *(only on technically hard units — math, crypto,
    concurrency, public contracts)* — a second, different model (OpenAI Codex)
    audits the diff.
-4. **Editor** — cleans the unit's written content (comments *and* prose):
-   strips narration, AI-isms, and conversational/requirements residue.
+4. **Editor** (`/crew:editor`) — cleans the unit's written content: strips
+   narration, AI-isms, and conversational residue.
 
 Once a **chunk** (several units) forms, it's closed with a `/simplify` → Codex
 pass. And every turn ends with the **ceremony**: `/code-review --fix` → Codex
@@ -32,26 +39,24 @@ Claude review specifically to catch what the review itself broke.
 ## Install
 
 ```
-/plugin marketplace add Jud/work-loop
-/plugin install work-loop@work-loop
+/plugin marketplace add Jud/crew
+/plugin install crew@crew
 ```
 
-Then invoke it on commit-producing work:
+Then invoke the loop on commit-producing work:
 
 ```
-/work-loop:work-loop [optional unit/chunk label]
+/crew:flow [optional unit/chunk label]
 ```
 
-For its Codex passes, `work-loop` depends on the `skill-codex` plugin
-(`skills-directory/skill-codex`) — the bridge it uses to reach OpenAI Codex.
+`/crew:auditor` and `/crew:editor` are available the same way, for an ad-hoc
+review of a diff range.
 
 ## Prerequisites
 
-`work-loop` orchestrates a few things it expects to be present:
-
 | Dependency | How it's provided | You still need |
 | --- | --- | --- |
-| **`skill-codex`** plugin | Installed with work-loop | The **Codex CLI** on your `PATH` **and** OpenAI authentication. The plugin is just the bridge — without the CLI + auth, the Codex passes cannot run. |
+| **`skill-codex`** plugin | Bundled with crew | The **Codex CLI** on your `PATH` **and** OpenAI authentication. The plugin is just the bridge — without the CLI + auth, the Codex passes cannot run. |
 | **`/simplify`**, **`/code-review`** | Built into recent Claude Code | A reasonably current Claude Code version |
 
 > **Heads up:** the single most common failure mode is the Codex passes
@@ -61,23 +66,30 @@ For its Codex passes, `work-loop` depends on the `skill-codex` plugin
 
 ## Local development
 
+Load the plugin from a local checkout — both forms give you the real `/crew:*`
+namespace:
+
 ```
-claude --plugin-dir ./plugins/work-loop      # load without installing
-/reload-plugins                              # after editing the manifests
+# persistent — add this repo as a local marketplace, then install
+/plugin marketplace add /path/to/crew
+/plugin install crew@crew
+
+# or session-scoped — load the plugin directory directly
+claude --plugin-dir ./plugins/crew
+/reload-plugins        # after editing the manifests
 ```
 
-Edits to `skills/work-loop/SKILL.md` take effect immediately in-session;
-manifest changes (`plugin.json` / `marketplace.json`) need `/reload-plugins`
-— run it too if a skill edit doesn't seem to apply.
+Edits to a skill's `SKILL.md` take effect immediately in-session; manifest
+changes (`plugin.json` / `marketplace.json`) need `/reload-plugins` — run it too
+if a skill edit doesn't seem to apply.
 
-> **Note:** a `--plugin-dir` load has no marketplace context, so the
-> `skill-codex` dependency is **not** auto-resolved this way. For the Codex
-> passes to run during local dev, install `skill-codex` separately (or add this
-> marketplace and install work-loop normally).
+> **Note:** a local load has no marketplace context for the dependency, so
+> install `skill-codex` separately for the Codex passes to run during local
+> dev.
 
 ## Updating
 
-- **work-loop itself** is versioned in `plugins/work-loop/.claude-plugin/plugin.json`.
+- **crew itself** is versioned in `plugins/crew/.claude-plugin/plugin.json`.
   Bump that `version` on each release — pushing commits without bumping it has
   no effect on installed users.
 - **The pinned Codex** is locked to an exact commit via the `sha` in
