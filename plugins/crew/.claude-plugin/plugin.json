@@ -1,12 +1,12 @@
 {
-  "name": "work-loop",
+  "name": "crew",
   "version": "1.0.0",
   "description": "An iterative development loop: build one unit at a time and review each as it lands (audit + /simplify), accumulate units into chunks reviewed a different way, and close the turn with a /code-review --fix → Codex gate. Fast iteration in, hardened code out.",
   "author": {
     "name": "Jud Stephenson",
     "email": "jud.stephenson@gmail.com"
   },
-  "repository": "https://github.com/Jud/work-loop",
+  "repository": "https://github.com/Jud/crew",
   "license": "MIT",
   "keywords": [
     "claude-code",

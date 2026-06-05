@@ -1,14 +1,14 @@
 {
-  "name": "work-loop",
-  "description": "Marketplace for the work-loop plugin and its cross-model verifier dependency.",
+  "name": "crew",
+  "description": "Marketplace for the crew plugin and its cross-model verifier dependency.",
   "owner": {
     "name": "Jud Stephenson",
     "url": "https://github.com/Jud"
   },
   "plugins": [
     {
-      "name": "work-loop",
-      "source": "./plugins/work-loop",
+      "name": "crew",
+      "source": "./plugins/crew",
       "description": "An iterative development loop — build and review one unit at a time (per-unit audit + /simplify), with chunk- and turn-level gates adding cross-model Codex and a /code-review pass."
     },
     {
@@ -19,7 +19,7 @@
         "path": "plugins/skill-codex",
         "sha": "b322cf0f9abc9d1ffef6989f9de3fdd01638500b"
       },
-      "description": "Delegate prompts to OpenAI Codex CLI — work-loop's cross-model verifier. Sha-pinned; upstream: skills-directory/skill-codex."
+      "description": "Delegate prompts to OpenAI Codex CLI — crew's cross-model verifier. Sha-pinned; upstream: skills-directory/skill-codex."
     }
   ]
 }

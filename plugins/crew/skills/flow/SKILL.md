@@ -1,5 +1,5 @@
 ---
-name: work-loop
+name: flow
 description: |
   The default way to do any work that writes or changes code or durable
   artifacts — features, refactors, fixes, design docs, investigations: build it
