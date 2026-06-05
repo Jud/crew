@@ -2,9 +2,9 @@
 
 **Fast iteration in, hardened code out.**
 
-`crew` is a Claude Code plugin: an iterative development loop with a review
-crew built in. You build one unit at a time — the agent decides what counts as
-a unit — and review each the moment it's committed. There's no upfront
+`crew` is a Claude Code plugin: an iterative development loop. You build one
+unit at a time — the agent decides what counts as a unit — and review each the
+moment it's committed. There's no upfront
 planning; the rigor lands continuously, as you build.
 
 The crew is three skills:
