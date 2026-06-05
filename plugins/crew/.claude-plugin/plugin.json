@@ -1,7 +1,7 @@
 {
   "name": "crew",
   "version": "1.0.0",
-  "description": "Vibe-code that actually ships. An iterative dev loop: build fast and loose while crew reviews every commit as it lands (audit + /simplify), and a second model gates each chunk with /code-review --fix → Codex. Fast iteration in, hardened code out.",
+  "description": "The new way to build: you bring the vision, the crew builds it — auditing and simplifying every commit as it lands, then gating each chunk with /code-review and a cross-model Codex pass. Fast iteration in, hardened code out.",
   "author": {
     "name": "Jud Stephenson",
     "email": "jud.stephenson@gmail.com"

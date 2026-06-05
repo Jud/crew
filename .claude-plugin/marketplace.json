@@ -9,7 +9,7 @@
     {
       "name": "crew",
       "source": "./plugins/crew",
-      "description": "Vibe-code that actually ships — an iterative dev loop as four skills: flow (the loop), auditor (correctness), editor (written-content), and specialist (the cross-model gate). Every commit reviewed as it lands; chunk and turn gates add Codex and a /code-review pass."
+      "description": "The new way to build — an iterative dev loop as four skills: flow (the loop), auditor (correctness), editor (written-content), and specialist (the cross-model gate). The crew builds and reviews every commit as it lands; chunks and turns close at a Codex + /code-review gate."
     },
     {
       "name": "skill-codex",
