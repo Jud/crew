@@ -1,7 +1,7 @@
 {
   "name": "crew",
   "version": "1.0.0",
-  "description": "An iterative development loop: build one unit at a time and review each as it lands (audit + /simplify), accumulate units into chunks reviewed a different way, and close the turn with a /code-review --fix → Codex gate. Fast iteration in, hardened code out.",
+  "description": "Vibe-code that actually ships. An iterative dev loop: build fast and loose while crew reviews every commit as it lands (audit + /simplify), and a second model gates each chunk with /code-review --fix → Codex. Fast iteration in, hardened code out.",
   "author": {
     "name": "Jud Stephenson",
     "email": "jud.stephenson@gmail.com"

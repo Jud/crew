@@ -2,14 +2,16 @@
   <img src="assets/crew-wordmark.png" alt="crew" width="440">
 </p>
 
-<p align="center"><strong>Fast iteration in, hardened code out.</strong></p>
+<p align="center"><strong>Vibe with your crew.</strong></p>
+
+<p align="center">Fast iteration in, hardened code out.</p>
 
 <br>
 
-**crew** is a Claude Code plugin for people who'd rather build than plan. You
-write code one commit at a time — no upfront design doc, no checklist to forget —
-and crew reviews every commit the moment it lands. Then, before anything merges,
-a *second model* re-checks the work.
+**crew** is the Claude Code plugin for *vibe-coding that actually ships*. Build
+as fast and loose as you want — crew reviews every commit the moment it lands,
+and before anything merges, a *second model* re-checks the work. The vibe stays;
+the code holds.
 
 ## Meet the crew
 
