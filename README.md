@@ -18,16 +18,19 @@ a *second model* re-checks the work.
 | **`/crew:flow`** | the loop | drives build → review for every commit, chunk, and turn |
 | **`/crew:auditor`** | the correctness pass | logic errors, edge cases, broken contracts, intent drift |
 | **`/crew:editor`** | the written-content pass | strips AI-isms, narration, and conversational residue |
+| **`/crew:specialist`** | the outside read | brings in OpenAI Codex — a different model — to re-check the work |
 
-`flow` runs the other two for you — or call them yourself on any diff.
+`flow` runs the rest of the crew for you — or call them in yourself: `auditor`
+and `editor` on any diff, `specialist` for a cross-model review or fresh eyes on
+a stubborn bug.
 
 ## What happens when you build
 
 Every commit gets an **audit** (correctness) and a separate **`/simplify`**
 (quality) the moment it lands. Every batch of commits gets a deeper pass. And
-every turn ends at the merge gate: Claude's own `/code-review`, then **OpenAI
-Codex** — a *different* model — reviewing what Claude just did, to catch what it
-missed.
+every turn ends at the merge gate: Claude's own `/code-review`, then the
+**specialist** calls in **OpenAI Codex** — a *different* model — to review what
+Claude just did, and catch what it missed.
 
 That last step is the point. Most review tools ask one model to grade its own
 homework. crew brings a second one, with different blind spots. You move fast
