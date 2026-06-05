@@ -46,10 +46,10 @@
     background:rgba(244,240,230,.85);
     backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
     border-bottom:1px solid var(--line);
-    transition:opacity .35s ease;
+    opacity:0; pointer-events:none; visibility:hidden;
+    transition:opacity .35s ease, visibility .35s ease;
   }
-  .js nav{opacity:0; pointer-events:none}
-  .js nav.show{opacity:1; pointer-events:auto}
+  nav.show{opacity:1; pointer-events:auto; visibility:visible}
   nav .brand{font-family:'Saira Condensed',sans-serif;font-weight:800;font-size:1.6rem;
     color:var(--ox);transform:skewX(-12deg);letter-spacing:-.02em}
   nav .gh{font-family:'Space Mono',monospace;font-size:.82rem;font-weight:700;
@@ -169,6 +169,7 @@
     html{scroll-behavior:auto}
   }
 </style>
+<noscript><style>.reveal{opacity:1;transform:none}nav{opacity:1;pointer-events:auto;visibility:visible}</style></noscript>
 </head>
 <body>
 
@@ -269,22 +270,6 @@
 </footer>
 
 <script>
-  document.documentElement.classList.add('js');
-
-  // scroll reveal
-  var io = new IntersectionObserver(function(es){
-    es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
-  }, {threshold:.16, rootMargin:'0px 0px -8% 0px'});
-  document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
-
-  // nav reveals only after the hero scrolls past
-  var hero = document.querySelector('header.hero'), nav = document.querySelector('nav');
-  if(hero && nav){
-    new IntersectionObserver(function(es){
-      nav.classList.toggle('show', es[0].intersectionRatio < 0.1);
-    }, {threshold:[0, 0.1, 1]}).observe(hero);
-  }
-
   // copy to clipboard; reset to a fixed label so rapid clicks can't strand stale text
   document.querySelectorAll('.copy').forEach(function(btn){
     var ic = btn.querySelector('.ic'), timer;
@@ -304,6 +289,25 @@
       }
     });
   });
+
+  // scroll-reveal + nav-reveal where supported; otherwise show everything up front
+  var nav = document.querySelector('nav');
+  if('IntersectionObserver' in window){
+    var io = new IntersectionObserver(function(es){
+      es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, {threshold:.16, rootMargin:'0px 0px -8% 0px'});
+    document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
+
+    var hero = document.querySelector('header.hero');
+    if(hero && nav){
+      new IntersectionObserver(function(es){
+        nav.classList.toggle('show', es[0].intersectionRatio < 0.1);
+      }, {threshold:[0, 0.1, 1]}).observe(hero);
+    }
+  } else {
+    document.querySelectorAll('.reveal').forEach(function(el){ el.classList.add('in'); });
+    if(nav){ nav.classList.add('show'); }
+  }
 </script>
 </body>
 </html>
