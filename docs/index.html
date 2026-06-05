@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>crew — the new way to build</title>
-<meta name="description" content="The new way to build with AI. You bring the vision; your crew builds it for real — writing every commit, reviewing as it lands, and hardening the whole thing — so what ships actually holds.">
+<meta name="description" content="You bring the vision; your crew builds it for real and hardens it as it goes — so what ships actually holds. A Claude Code plugin.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@600;700;800;900&family=Space+Mono:wght@400;700&family=Inter:wght@400;450;500;600&display=swap" rel="stylesheet">
@@ -180,7 +180,7 @@
   <p class="eyebrow">// a claude code plugin</p>
   <h1><span class="wm">crew</span></h1>
   <p class="tag">The new way<br>to build.</p>
-  <p class="sub">You bring the vision; your crew builds it for real — writing every commit, reviewing each one as it lands, bringing in a second model, hardening the whole thing — so what ships actually holds. You stay in the vibe; the crew sweats the build.</p>
+  <p class="sub">Your crew builds your vision for real — reviewing every commit as it lands, hardening it with a second model — so what ships actually holds. You stay in the vibe; the crew sweats the build.</p>
   <div class="cta">
     <a class="cta-btn" href="#install">Get the crew ↓</a>
   </div>
@@ -195,8 +195,8 @@
         <h2 class="lead reveal">You bring the <em>vision</em>.</h2>
       </div>
       <div class="right">
-        <p class="body reveal">You don't grind through the build — you decide what to make, and your crew makes it: writing the code, committing it, reviewing every commit the moment it lands.</p>
-        <p class="body reveal">A correctness audit, a quality pass, an editorial sweep — the rigor arrives continuously, while you stay in the vibe.</p>
+        <p class="body reveal">You don't grind through the build — you set the direction, and the crew does the rest, reviewing every commit the moment it lands.</p>
+        <p class="body reveal">A correctness audit, a quality pass, an editorial sweep — the rigor never stops, and never slows you down.</p>
       </div>
     </div>
   </section>
@@ -232,8 +232,8 @@
       </div>
       <div class="right">
         <p class="body reveal">Most review tools ask one model to grade its own homework. crew doesn't.</p>
-        <p class="body reveal">As the crew builds, the <b>specialist</b> brings in <b>OpenAI Codex</b> — a different model, different blind spots — to cross-check the work and catch what Claude missed. That's the bar each chunk has to clear before it's called done.</p>
-        <p class="body reveal">You stay loose; the crew makes it hold. What ships has been audited, simplified, edited, and cross-examined.</p>
+        <p class="body reveal">As the crew builds, the <b>specialist</b> brings in <b>OpenAI Codex</b> — a different model, different blind spots — to cross-check the work and catch what Claude missed. That's the bar every chunk has to clear.</p>
+        <p class="body reveal">What ships has been audited, simplified, edited, and cross-examined.</p>
       </div>
     </div>
   </section>
@@ -282,7 +282,7 @@
     }, {threshold:[0, 0.1, 1]}).observe(hero);
   }
 
-  // copy command to clipboard — honest about failure, no double-click freeze
+  // copy to clipboard; reset to a fixed label so rapid clicks can't strand stale text
   document.querySelectorAll('.copy').forEach(function(btn){
     var ic = btn.querySelector('.ic'), timer;
     function flash(label, ok){
