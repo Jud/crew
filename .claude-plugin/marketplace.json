@@ -9,7 +9,7 @@
     {
       "name": "crew",
       "source": "./plugins/crew",
-      "description": "The new way to build — an iterative dev loop as four skills: flow (the loop), auditor (correctness), editor (written-content), and specialist (the cross-model gate). The crew builds and reviews every commit as it lands; chunks and turns close at a Codex + /code-review gate."
+      "description": "The new way to build — an iterative dev loop as four skills: flow (the loop), auditor (correctness), editor (written-content), and specialist (the cross-model gate). The crew builds and reviews every commit as it lands; each chunk closes with a Codex pass, each turn with /code-review."
     },
     {
       "name": "skill-codex",

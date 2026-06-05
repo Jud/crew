@@ -1,7 +1,7 @@
 {
   "name": "crew",
   "version": "1.0.0",
-  "description": "The new way to build: you bring the vision, the crew builds it — auditing and simplifying every commit as it lands, then gating each chunk with /code-review and a cross-model Codex pass. Fast iteration in, hardened code out.",
+  "description": "The new way to build: you bring the vision, the crew builds it — auditing and simplifying every commit as it lands, closing each chunk with a cross-model Codex pass and each turn with a /code-review gate. Fast iteration in, hardened code out.",
   "author": {
     "name": "Jud Stephenson",
     "email": "jud.stephenson@gmail.com"

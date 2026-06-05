@@ -27,10 +27,11 @@ a stubborn bug.
 
 ## How it works
 
-Every commit the crew makes gets an **audit** (correctness) and a separate
-**`/simplify`** (quality) the moment it lands. Each chunk and turn then closes
-at the cross-model gate: Claude's own `/code-review`, then the **specialist**
-brings in **OpenAI Codex** — a *different* model — to catch what Claude missed.
+Every commit the crew makes is **audited** for correctness and run through
+**`/simplify`** for quality the moment it lands. Each chunk then closes with a
+cross-model pass — the **specialist** brings in **OpenAI Codex**, a *different*
+model, to catch what Claude missed — and the turn ends with a full
+`/code-review` on top.
 
 That second model is the point: crew never lets one model grade its own
 homework. What ships has been audited, simplified, edited, and cross-examined.
