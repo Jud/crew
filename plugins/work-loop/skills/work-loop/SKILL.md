@@ -259,5 +259,7 @@ These excuses don't hold:
   close; run the end-of-turn ceremony once (see Single-chunk caveat).
 - *"I'll batch these units and review them later."* — No. Per-unit review runs
   to completion before you fetch the next.
-- *"This won't really produce a commit, so the loop doesn't apply."* — No. If
-  you're changing code or artifacts, you're in the loop; when unsure, invoke.
+- *"This won't really produce a commit, so the loop doesn't apply."* — No. The
+  trigger is doing real code/artifact work, not predicting a commit; only the
+  description's skip-list (pure conversation, read-only, one-line typo) is
+  exempt. When unsure, invoke.
