@@ -1,12 +1,12 @@
 ---
 name: work-loop
 description: |
-  An iterative development loop: build one agent-sized unit at a time,
-  reviewing each as it lands (audit + /simplify, both mandatory, run
-  separately); accumulate units into chunks, each closed mid-turn with
-  /simplify → codex; close the turn's final chunk with a /code-review --fix →
-  codex gate. Optional inline codex on hard units. Pass an optional unit/chunk
-  label via $ARGUMENTS.
+  The default way to do any work that writes or changes code or durable
+  artifacts — features, refactors, fixes, design docs, investigations: build it
+  through this loop rather than editing freely. Skip it only for pure
+  conversation, read-only exploration, or a one-line typo — and if you're
+  unsure whether work qualifies, it does; invoke it. Pass an optional
+  unit/chunk label via $ARGUMENTS.
 allowed-tools: Bash Read Edit Write Agent Skill TaskCreate TaskUpdate TaskList
 ---
 
