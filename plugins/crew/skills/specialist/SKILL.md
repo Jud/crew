@@ -30,9 +30,9 @@ them. Read `$ARGUMENTS` and pick the mode:
       Skill({skill: "skill-codex:codex",
              args: "<the problem and the context Codex needs>. gpt-5.5, xhigh, read-only — don't prompt for these."})
 
-Keep the invocation legible: for a long prompt, write it to a temp file and pass
-it to codex as `"$(cat <file>)"` rather than inlining it — an inlined long prompt
-*becomes* the command, so a backgrounded run is named after the whole prompt.
-Foreground runs avoid that; prefer them.
+Give the codex Bash call a short, friendly **description** (e.g. `codex: review
+<range>`) — that's the name shown for the run; without one, the raw `codex exec`
+command shows instead. If a long prompt needs a temp file, give it a **unique**
+name (`mktemp`) — fixed paths collide when crew agents run in parallel.
 
 Relay Codex's response as your result; apply nothing yourself unless asked.
