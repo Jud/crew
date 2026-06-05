@@ -237,12 +237,11 @@ code-review+codex, flag it — cannot merge); suggested next step.
 - **Audit and /simplify are both mandatory, run separately.** Never merge
   them into one pass — Audit is correctness, /simplify is quality; each is a
   distinct run with its own findings commit.
-- **Codex only via `skill-codex:codex`**, never the raw CLI. Invoking the
-  skill (rather than a hand-rolled `codex` command) is what gets you session
-  **resume** and keeps codex's reasoning tokens out of your context — it
-  closes stdin and redirects stderr for you, so no hangs and no context
-  floods. It runs AFTER the review pass (to catch what that pass broke),
-  scoped to the diff range, with the gpt-5.5 / xhigh / read-only default.
+- **Codex only via `skill-codex:codex`**, never the raw CLI — the skill gives
+  you session **resume** and keeps codex's reasoning tokens out of your
+  context (see Gotchas for why a hand-rolled call hangs and floods). It runs
+  AFTER the review pass (to catch what that pass broke), scoped to the diff
+  range, with the gpt-5.5 / xhigh / read-only default.
 - **Honest ROI.** Skip findings with one-line reasons; don't argue.
 - **No safety bypass.** No `--no-verify`, no force ops; fix hook failures
   at the source.
@@ -252,7 +251,7 @@ code-review+codex, flag it — cannot merge); suggested next step.
 
 ## Rationalizations to reject
 
-These excuses have all shown up; none hold:
+These excuses don't hold:
 
 - *"One review pass covered correctness and quality."* — No. Audit and
   /simplify catch different defect classes; run both, separately.
