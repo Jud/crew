@@ -30,4 +30,9 @@ them. Read `$ARGUMENTS` and pick the mode:
       Skill({skill: "skill-codex:codex",
              args: "<the problem and the context Codex needs>. gpt-5.5, xhigh, read-only — don't prompt for these."})
 
+Keep the invocation legible: for a long prompt, write it to a temp file and pass
+it to codex as `"$(cat <file>)"` rather than inlining it — an inlined long prompt
+*becomes* the command, so a backgrounded run shows up named after the whole
+thing. Prefer running codex in the foreground; the loop waits for the findings.
+
 Relay Codex's response as your result; apply nothing yourself unless asked.
