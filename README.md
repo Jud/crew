@@ -1,40 +1,38 @@
-# crew
+<p align="center">
+  <img src="assets/crew-wordmark.png" alt="crew" width="440">
+</p>
 
-**Fast iteration in, hardened code out.**
+<p align="center"><strong>Fast iteration in, hardened code out.</strong></p>
 
-`crew` is a Claude Code plugin: an iterative development loop. You build one
-unit at a time — the agent decides what counts as a unit — and review each the
-moment it's committed. There's no upfront
-planning; the rigor lands continuously, as you build.
+<br>
 
-The crew is three skills:
+**crew** is a Claude Code plugin for people who'd rather build than plan. You
+write code one commit at a time — no upfront design doc, no checklist to forget —
+and crew reviews every commit the moment it lands. Then, before anything merges,
+a *second model* re-checks the work.
 
-- **`/crew:flow`** — the loop. Drives build → review for every unit, and closes
-  each chunk and the turn with deeper gates.
-- **`/crew:auditor`** — a correctness-only review of a diff range. Flow spawns
-  it per unit; also runnable on its own.
-- **`/crew:editor`** — an editorial pass over a diff's written content (comments
-  *and* prose). Flow calls it per unit; also runnable on its own.
+## Meet the crew
 
-## The loop
+| | | |
+|---|---|---|
+| **`/crew:flow`** | the loop | drives build → review for every commit, chunk, and turn |
+| **`/crew:auditor`** | the correctness pass | logic errors, edge cases, broken contracts, intent drift |
+| **`/crew:editor`** | the written-content pass | strips AI-isms, narration, and conversational residue |
 
-For every **unit** (one logical commit), right after you commit:
+`flow` runs the other two for you — or call them yourself on any diff.
 
-1. **Audit** (`/crew:auditor`) — correctness only: logic errors, edge cases,
-   broken contracts, intent mismatch.
-2. **/simplify** — a separate quality pass: reuse, simplification, efficiency,
-   altitude. (Distinct from the audit — correctness and quality catch different
-   things.)
-3. **Inline Codex** *(only on technically hard units — math, crypto,
-   concurrency, public contracts)* — a second, different model (OpenAI Codex)
-   audits the diff.
-4. **Editor** (`/crew:editor`) — cleans the unit's written content: strips
-   narration, AI-isms, and conversational residue.
+## What happens when you build
 
-Once a **chunk** (several units) forms, it's closed with a `/simplify` → Codex
-pass. And every turn ends with the **ceremony**: `/code-review --fix` → Codex
-over the whole chunk. That ceremony is the merge gate — Codex runs *after* the
-Claude review specifically to catch what the review itself broke.
+Every commit gets an **audit** (correctness) and a separate **`/simplify`**
+(quality) the moment it lands. Every batch of commits gets a deeper pass. And
+every turn ends at the merge gate: Claude's own `/code-review`, then **OpenAI
+Codex** — a *different* model — reviewing what Claude just did, to catch what it
+missed.
+
+That last step is the point. Most review tools ask one model to grade its own
+homework. crew brings a second one, with different blind spots. You move fast
+and loose; what comes out has been audited, simplified, edited, and
+cross-examined.
 
 ## Install
 
@@ -43,63 +41,17 @@ Claude review specifically to catch what the review itself broke.
 /plugin install crew@crew
 ```
 
-Then invoke the loop on commit-producing work:
+Then, on any commit-producing work:
 
 ```
-/crew:flow [optional unit/chunk label]
+/crew:flow
 ```
 
-`/crew:auditor` and `/crew:editor` are available the same way, for an ad-hoc
-review of a diff range.
-
-## Prerequisites
-
-| Dependency | How it's provided | You still need |
-| --- | --- | --- |
-| **`skill-codex`** plugin | Bundled with crew | The **Codex CLI** on your `PATH` **and** OpenAI authentication. The plugin is just the bridge — without the CLI + auth, the Codex passes cannot run. |
-| **`/simplify`**, **`/code-review`** | Built into recent Claude Code | A reasonably current Claude Code version |
-
-> **Heads up:** the single most common failure mode is the Codex passes
-> silently no-op'ing because the `codex` CLI isn't installed or isn't
-> authenticated. If you see the loop skipping every Codex step, check that
-> first.
-
-## Local development
-
-Load the plugin from a local checkout — both forms give you the real `/crew:*`
-namespace:
-
-```
-# persistent — add this repo as a local marketplace, then install
-/plugin marketplace add /path/to/crew
-/plugin install crew@crew
-
-# or session-scoped — load the plugin directory directly
-claude --plugin-dir ./plugins/crew
-/reload-plugins        # after editing the manifests
-```
-
-Edits to a skill's `SKILL.md` take effect immediately in-session; manifest
-changes (`plugin.json` / `marketplace.json`) need `/reload-plugins` — run it too
-if a skill edit doesn't seem to apply.
-
-> **Note:** the `--plugin-dir` form has no marketplace context, so it won't
-> resolve the `skill-codex` dependency — install it separately for the Codex
-> passes to run. (The marketplace-add form above resolves it the normal way.)
-
-## Updating
-
-- **crew itself** is versioned in `plugins/crew/.claude-plugin/plugin.json`.
-  Bump that `version` on each release — pushing commits without bumping it has
-  no effect on installed users.
-- **The pinned Codex** is locked to an exact commit via the `sha` in
-  `.claude-plugin/marketplace.json` (the `skill-codex` entry). This gives
-  reproducible behavior, at the cost of no automatic upstream updates. To move
-  to a newer Codex, bump the `sha`. Note that update detection keys on the
-  `version` string, not the SHA: if the new Codex commit keeps the same
-  `skill-codex` version, existing installs may need a `/plugin` reinstall (or
-  `claude plugin prune`) to pick it up.
+**One prerequisite.** crew's cross-model gate runs the real OpenAI Codex CLI.
+The bridge to it (the `skill-codex` plugin) installs with crew, but the CLI
+itself is yours to provide: the `codex` command on your `PATH`, plus OpenAI
+auth. Without it, the Codex passes skip — everything else still runs.
 
 ## License
 
-MIT — see [LICENSE](LICENSE).
+MIT
