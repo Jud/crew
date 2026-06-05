@@ -70,21 +70,18 @@ running one is not a substitute for the other.
    and commit with a per-unit label. Unit range = `HEAD~1..HEAD`.
 
 2. **Audit (correctness).** Skip if trivial (≤20 lines, doc/comment/
-   whitespace only) — note it. Otherwise launch ONE `general-purpose`
-   Agent (Opus) with this prompt verbatim — actually spawn the agent,
-   never fake the run:
+   whitespace only) — note it. Otherwise invoke the **`/crew:auditor`
+   skill** via the Skill tool — never a hand-rolled prompt — and let the
+   forked subagent run to completion; never fake the run:
 
-   > You are a code auditor. Review the supplied diff for **correctness
-   > only**. Do NOT review style, reuse, or efficiency. Check: logic
-   > errors, off-by-ones, missing edge cases; type drift, broken
-   > contracts, invariants violated; dead code or unreachable branches;
-   > bugs the diff *almost* fixes; mismatch between stated intent
-   > (`$ARGUMENTS`) and what the code does. Output a short bulleted list.
-   > Each finding: file:line, what's wrong, what to do. No narrative. If
-   > correct as-is, say so in one line.
+   ```
+   Skill({skill: "crew:auditor", args: "<unit-range> <intent>"})
+   ```
 
-   Apply findings (or one-line skip reasons). Commit `Address <unit>
-   audit findings` (no empty commits).
+   `<unit-range>` is `HEAD~1..HEAD`; `<intent>` is the unit's stated purpose
+   (from `$ARGUMENTS`). The auditor fetches its own diff and returns
+   correctness findings only. Apply findings (or one-line skip reasons).
+   Commit `Address <unit> audit findings` (no empty commits).
 
 3. **Simplify (quality).** Skip if trivial (same threshold). Otherwise
    invoke the **literal `/simplify <unit-range>` skill** via the Skill
@@ -118,39 +115,13 @@ can't be mistaken for a chunk-close `codex findings` commit (see Mid-turn close)
 Right after the Audit and Simplify (and any Inline codex commit), on the same
 unit. The Editor cleans the unit's **written content** — code comments **and**
 authored prose (docs, READMEs, docstrings, manifest/skill descriptions,
-user-facing strings). Launch ONE `general-purpose` Agent (Opus) with this
-prompt verbatim:
+user-facing strings). Invoke the **`/crew:editor` skill** via the Skill tool:
 
-   > You are an editor. Review the supplied diff's **written content** — code
-   > comments and any authored prose (markdown, docs, docstrings, manifest/
-   > skill descriptions, user-facing strings). Cut what serves the writing
-   > rather than the reader; keep what the reader's task needs.
-   >
-   > **Comments** — delete those that explain WHAT the code does (well-named
-   > identifiers already say it), narrate the change, reference the task or a
-   > collaborator, or are AI-style "this does X" docs without a non-obvious WHY.
-   >
-   > **Prose** — cut three shapes:
-   > - **Automatic / default behavior** — narration of what the tooling does on
-   >   its own, which the reader neither triggers nor handles (for example, a
-   >   note that a package manager auto-installs a declared dependency tells the
-   >   reader nothing they didn't already assume). Where such narration wraps a
-   >   genuine fact, rewrite to keep the fact and drop the mechanics.
-   > - **Conversational residue** — traces of how the artifact was built, not
-   >   what the reader needs: answers to questions nobody asked, choices
-   >   defended that nobody challenged, or asides to a collaborator. The tell:
-   >   it only makes sense if you were in the room when it was written.
-   > - **Filler** — hedging, throat-clearing, marketing tone, or meta-commentary
-   >   that carries no information and changes nothing the reader knows or does.
-   >
-   > **Keep** what the reader's task needs: the steps and commands they run,
-   > real prerequisites, real caveats (especially surprising departures from
-   > what they'd assume), and non-obvious WHY — including a genuine caveat or
-   > fact sitting next to text you cut.
-   >
-   > Output a short bulleted list: file:line, what to cut or rewrite, why. If
-   > clean, say so in one line.
+   ```
+   Skill({skill: "crew:editor", args: "<unit-range> <intent>"})
+   ```
 
+The forked editor fetches its own diff and returns cut/rewrite findings.
 Apply deletions/rewrites (or one-line skips). Commit `Address <unit> editor
 pass`; skip the commit if the writing is clean.
 
@@ -230,9 +201,10 @@ code-review+codex, flag it — cannot merge); suggested next step.
 ## Discipline
 
 - **Run skills to completion.** When a step here invokes a skill
-  (`/code-review`, `/simplify`, `skill-codex:codex`), that is mandatory, not
-  a judgment call — invoke it and run its procedure verbatim with your own
-  tool calls, then report what it produced.
+  (`/code-review`, `/simplify`, `skill-codex:codex`, `/crew:auditor`,
+  `/crew:editor`), that is mandatory, not a judgment call — invoke it and run
+  its procedure verbatim with your own tool calls, then report what it
+  produced.
 - **One unit per commit.** Split mixed diffs before the Audit.
 - **Audit and /simplify are both mandatory, run separately.** Never merge
   them into one pass — Audit is correctness, /simplify is quality; each is a
