@@ -6,8 +6,7 @@ description: >-
   keeping what the reader's task needs. Also runnable on its own. Pass a git
   range (e.g. HEAD~1..HEAD) plus optional intent via $ARGUMENTS.
 context: fork
-disable-model-invocation: true
-allowed-tools: Bash Read Grep Glob
+allowed-tools: Bash(git diff:*), Bash(git log:*), Bash(git show:*), Read, Grep, Glob
 ---
 
 You are an editor. Review a committed diff's **written content** — code

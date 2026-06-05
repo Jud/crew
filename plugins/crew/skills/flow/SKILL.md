@@ -67,7 +67,11 @@ them into one review. **Audit** hunts correctness; **/simplify** hunts quality
 running one is not a substitute for the other.
 
 1. Confirm the tree holds ONE unit; stage explicitly (no `git add -A`)
-   and commit with a per-unit label. Unit range = `HEAD~1..HEAD`.
+   and commit with a per-unit label. The unit is `HEAD~1..HEAD` right after
+   this commit; call the implementation commit's parent `<unit-base>` (it
+   stays fixed as audit/simplify/inline-codex fix commits land on top), so
+   review steps that run later scope to `<unit-base>..HEAD` — the whole unit
+   so far.
 
 2. **Audit (correctness).** Skip if trivial (≤20 lines, doc/comment/
    whitespace only) — note it. Otherwise invoke the **`/crew:auditor`
@@ -85,7 +89,7 @@ running one is not a substitute for the other.
    Commit `Address <unit> audit findings` (no empty commits).
 
 3. **Simplify (quality).** Skip if trivial (same threshold). Otherwise
-   invoke the **literal `/simplify <unit-range>` skill** via the Skill
+   invoke the **literal `/simplify <unit-base>..HEAD` skill** via the Skill
    tool — NOT a hand-rolled prompt — and **follow the loaded skill to
    completion: spawn its agents and let them produce the findings.** Same
    bar as the end-of-turn `/code-review`: actually run it; never summarize,
@@ -106,8 +110,7 @@ Skill({skill: "skill-codex:codex",
        args: "Review the committed diff <unit-base>..HEAD for correctness, security, and contract bugs. gpt-5.5, xhigh, read-only — don't prompt for these. Findings only; no edits."})
 ```
 
-`<unit-base>` = the parent of your implementation commit (`HEAD~1`, walking
-back past any audit/simplify fix commits that followed). Apply findings, commit
+`<unit-base>..HEAD` is the whole unit so far (see step 1). Apply findings, commit
 `Address <unit> inline-codex review` — labelled `review`, not `findings`, so it
 can't be mistaken for a chunk-close `codex findings` commit (see Mid-turn close).
 
@@ -122,11 +125,9 @@ user-facing strings). Invoke the **`/crew:editor` skill** via the Skill tool:
    Skill({skill: "crew:editor", args: "<unit-base>..HEAD <intent>"})
    ```
 
-`<unit-base>` is the parent of the unit's implementation commit — walk back
-past the audit/simplify/inline-codex fix commits, as in Inline codex — so the
-editor sees the unit's full written content, not just the latest fix
-(`<intent>` as in the Audit step). The forked editor fetches its own diff and
-returns cut/rewrite findings. Apply deletions/rewrites (or one-line skips).
+`<unit-base>..HEAD` (see step 1) gives the editor the unit's full written
+content, not just the latest fix; `<intent>` is as in the Audit step. The
+forked editor fetches its own diff and returns cut/rewrite findings. Apply deletions/rewrites (or one-line skips).
 Commit `Address <unit> editor pass`; skip the commit if the writing is clean.
 
 ## Mid-turn close (required once a chunk forms)

@@ -5,8 +5,7 @@ description: >-
   own. Pass a git range (e.g. HEAD~1..HEAD or origin/main..HEAD) plus optional
   intent via $ARGUMENTS.
 context: fork
-disable-model-invocation: true
-allowed-tools: Bash Read Grep Glob
+allowed-tools: Bash(git diff:*), Bash(git log:*), Bash(git show:*), Read, Grep, Glob
 ---
 
 You are a code auditor. Review a committed diff for **correctness only**.
