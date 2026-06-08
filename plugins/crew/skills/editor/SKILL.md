@@ -33,8 +33,7 @@ docs without a non-obvious WHY.
 - **Conversational residue** — traces of how the artifact was built, not what
   the reader needs: answers to questions nobody asked, choices defended that
   nobody challenged, asides to a collaborator, or narration of the process that
-  produced it — the plan it followed, the phases or steps or order it moved
-  through. The reader needs the result, not the recipe; the tell is it only
+  produced it — the plan, phases, or order it moved through. The tell: it only
   makes sense if you were in the room when it was written.
 - **Filler** — hedging, throat-clearing, marketing tone, or meta-commentary
   that carries no information and changes nothing the reader knows or does.
