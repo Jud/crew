@@ -220,7 +220,7 @@ code-review+codex, flag it — cannot merge); suggested next step.
   distinct run with its own findings commit.
 - **The Editor is mandatory on every unit, and `/code-review` is not a
   substitute.** The Editor cleans *written content* (AI-isms, narration,
-  conversational residue); `/code-review` and `/simplify` clean
+  conversational residue, filler); `/code-review` and `/simplify` clean
   *code* (reuse, simplification, efficiency, altitude) — different defect
   classes. Run the Editor over every unit's written content; never fold it into
   a close.
@@ -245,7 +245,7 @@ These excuses don't hold:
 - *"The ceremony's `/code-review` already has a cleanup pass, so the per-unit
   Editor is covered."* — No. That pass cleans *code* (reuse, simplification,
   efficiency); the Editor cleans *written content* (AI-isms, narration,
-  conversational residue) and runs only when you run it. Editor on every unit.
+  conversational residue, filler) and runs only when you run it. Editor on every unit.
 - *"It's one small chunk, I'll skip the ceremony."* — No. The turn ends on a
   close; run the end-of-turn ceremony once (see Single-chunk caveat).
 - *"I'll batch these units and review them later."* — No. Per-unit review runs
