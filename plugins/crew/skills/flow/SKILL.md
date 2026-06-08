@@ -114,21 +114,26 @@ Skill({skill: "crew:specialist", args: "<unit-base>..HEAD"})
 `Address <unit> inline-codex review` — labelled `review`, not `findings`, so it
 can't be mistaken for a chunk-close `codex findings` commit (see Mid-turn close).
 
-## Editor (every unit, lightweight)
+## Editor (every unit — mandatory, never folded into a close)
 
 Right after the Audit and Simplify (and any Inline codex commit), on the same
-unit. The Editor cleans the unit's **written content** — code comments **and**
-authored prose (docs, READMEs, docstrings, manifest/skill descriptions,
-user-facing strings). Invoke the **`/crew:editor` skill** via the Skill tool:
+unit. **Run it on every unit. The end-of-turn `/code-review` is not a
+substitute:** that pass and `/simplify` clean *code* (reuse, simplification,
+efficiency, altitude); the Editor cleans **written content** — code comments
+**and** authored prose (docs, READMEs, docstrings, manifest/skill descriptions,
+user-facing strings) — hunting the residue they never look for: AI-isms,
+narration, conversational and requirements residue, filler. Invoke the
+**`/crew:editor` skill** via the Skill tool:
 
    ```
    Skill({skill: "crew:editor", args: "<unit-base>..HEAD <intent>"})
    ```
 
 `<unit-base>..HEAD` (see step 1) gives the editor the unit's full written
-content, not just the latest fix; `<intent>` is as in the Audit step. The
-forked editor fetches its own diff and returns cut/rewrite findings. Apply deletions/rewrites (or one-line skips).
-Commit `Address <unit> editor pass`; skip the commit if the writing is clean.
+content, not just the latest fix; `<intent>` is as in the Audit step. The forked
+editor fetches its own diff and returns cut/rewrite findings. Apply
+deletions/rewrites (or one-line skips). Commit `Address <unit> editor pass` —
+skip the commit, never the pass, when the writing is clean.
 
 ## Mid-turn close (required once a chunk forms)
 
@@ -213,6 +218,12 @@ code-review+codex, flag it — cannot merge); suggested next step.
 - **Audit and /simplify are both mandatory, run separately.** Never merge
   them into one pass — Audit is correctness, /simplify is quality; each is a
   distinct run with its own findings commit.
+- **The Editor is mandatory on every unit, and `/code-review` is not a
+  substitute.** The Editor cleans *written content* (AI-isms, narration,
+  conversational and requirements residue); `/code-review` and `/simplify` clean
+  *code* (reuse, simplification, efficiency, altitude) — different defect
+  classes. Run the Editor over every unit's written content; never fold it into
+  a close.
 - **Codex only via `/crew:specialist`** (which goes through `skill-codex`),
   never the raw CLI — the specialist owns the gpt-5.5 / xhigh / read-only
   defaults and keeps codex's reasoning tokens out of your context (see Gotchas
@@ -231,6 +242,10 @@ These excuses don't hold:
 
 - *"One review pass covered correctness and quality."* — No. Audit and
   /simplify catch different defect classes; run both, separately.
+- *"The ceremony's `/code-review` already has a cleanup pass, so the per-unit
+  Editor is covered."* — No. That pass cleans *code* (reuse, simplification,
+  efficiency); the Editor cleans *written content* (AI-isms, narration,
+  conversational residue) and runs only when you run it. Editor on every unit.
 - *"It's one small chunk, I'll skip the ceremony."* — No. The turn ends on a
   close; run the end-of-turn ceremony once (see Single-chunk caveat).
 - *"I'll batch these units and review them later."* — No. Per-unit review runs
