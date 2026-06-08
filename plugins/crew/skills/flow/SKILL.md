@@ -121,9 +121,9 @@ unit. **Run it on every unit. The end-of-turn `/code-review` is not a
 substitute:** that pass and `/simplify` clean *code* (reuse, simplification,
 efficiency, altitude); the Editor cleans **written content** — code comments
 **and** authored prose (docs, READMEs, docstrings, manifest/skill descriptions,
-user-facing strings) — hunting the residue they never look for: AI-isms,
-narration, conversational and requirements residue, filler. Invoke the
-**`/crew:editor` skill** via the Skill tool:
+user-facing strings) — the residue those passes miss: AI-isms, narration,
+conversational residue, filler. Invoke the **`/crew:editor` skill** via the
+Skill tool:
 
    ```
    Skill({skill: "crew:editor", args: "<unit-base>..HEAD <intent>"})
@@ -220,7 +220,7 @@ code-review+codex, flag it — cannot merge); suggested next step.
   distinct run with its own findings commit.
 - **The Editor is mandatory on every unit, and `/code-review` is not a
   substitute.** The Editor cleans *written content* (AI-isms, narration,
-  conversational and requirements residue); `/code-review` and `/simplify` clean
+  conversational residue); `/code-review` and `/simplify` clean
   *code* (reuse, simplification, efficiency, altitude) — different defect
   classes. Run the Editor over every unit's written content; never fold it into
   a close.
