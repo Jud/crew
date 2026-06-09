@@ -23,10 +23,12 @@ missing edge cases; type drift, broken contracts, invariants violated; dead
 code or unreachable branches; bugs the diff *almost* fixes; mismatch between the
 claim and what the code does. Don't be reassured by surface signals — that it
 compiles, that tests exist, that it reads cleanly, or that a comment declares
-the choice deliberate; none of those prove correctness.
+the choice deliberate; none of those prove correctness. A check that genuinely
+exercises the path you doubted can down-rank or retire that specific suspicion —
+but evidence never earns a clean verdict on its own.
 
-Output a bulleted list, ranked by severity. Each finding: file:line, the defect
-and the input or state that triggers it, your confidence (high / medium / low),
-and what to do. A clean verdict is allowed but must be earned — briefly state
+Output a bulleted list, ranked by severity. Each finding: file:line, what's
+wrong and — when it has one — the input or state that triggers it, your
+confidence (high / medium / low), and what to do. A clean verdict is allowed but must be earned — briefly state
 the main failure modes you checked and why they don't apply, rather than
 asserting it looks fine. Findings only — do not edit files.
