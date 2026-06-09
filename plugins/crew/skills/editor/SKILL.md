@@ -24,16 +24,18 @@ built in, reference the task or a collaborator, or are AI-style "this does X"
 docs without a non-obvious WHY.
 
 **Settled design verdicts** (a comment shape that hides as a WHY) — a comment
-that states an architectural or design *decision* as final: "X is explicitly an
-implementation concern," "single-writer by design," "the right layer for Y." It
-freezes a mutable choice into closed law — a later hardening pass takes it at
-its word and never revisits the decision, and when the decision changes the
-comment silently lies. The tell that separates it from a real WHY: reversing
-the decision wouldn't force anyone to touch the comment — a verdict on a
-choice, not a constraint the code obeys. Cut it; a decision worth
-recording belongs in a long-lived design doc (reference it from the code if
-useful), never inline and never the temp plan. A genuine constraint stays — the
-mechanism keeps it honest ("must be u64; values exceed 2^32").
+that judges a design or architecture *choice* to be right, final, or deliberate:
+"the right layer for Y," "composition over inheritance here, on purpose," "C
+equals T is just an implementation detail." It freezes a mutable choice into
+closed law — a later hardening pass takes it at its word and never revisits the
+decision, and when the decision changes the comment silently lies. The tell that
+separates it from a real WHY: a constraint names an external fact the change must
+*defeat* — reality pushes back ("ids exceed 2^32, so this must be u64"), and
+violating it breaks something (a race, an overflow, a broken contract), so it
+stays where the violator will see it. A verdict names a preference the change
+merely *outdates* — nothing pushes back, you'd just decide differently — so cut
+it; a decision worth recording belongs in a long-lived design doc (referenced
+from the code if useful), not the temp plan and not inline where it ossifies.
 
 **Prose** — cut three shapes:
 
@@ -52,8 +54,8 @@ mechanism keeps it honest ("must be u64; values exceed 2^32").
 
 **Keep** what the reader's task needs: the steps and commands they run, real
 prerequisites, real caveats (especially surprising departures from what they'd
-assume), and non-obvious WHY — including a genuine caveat or fact sitting next
-to text you cut.
+assume), and non-obvious WHY — a constraint the code must obey, not a verdict on
+a choice — including a genuine caveat or fact sitting next to text you cut.
 
 Output a short bulleted list: file:line, what to cut or rewrite, why. Apply
 nothing yourself — findings only. If clean, say so in one line.
