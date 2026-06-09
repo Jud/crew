@@ -231,8 +231,9 @@ code-review+codex, flag it — cannot merge); suggested next step.
   to catch what that pass broke.
 - **Blocked and can't explain it? Consult, don't stop.** A failure that
   contradicts your mental model, a gate that won't pass for reasons you can't
-  name — hand it to `/crew:specialist` (its consult mode) before stopping to
-  ask the user. The outside model usually unblocks you faster than a
+  name — before stopping to ask the user, hand it to `/crew:specialist` as a
+  problem, not a range, and not a chunk close, so it produces no `codex
+  findings` commit. The outside model usually unblocks you faster than a
   round-trip; reserve stopping for decisions only the user can make.
 - **Honest ROI.** Skip findings with one-line reasons; don't argue.
 - **No safety bypass.** No `--no-verify`, no force ops; fix hook failures
