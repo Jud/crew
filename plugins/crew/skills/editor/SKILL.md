@@ -28,9 +28,9 @@ that states an architectural or design *decision* as final: "X is explicitly an
 implementation concern," "single-writer by design," "the right layer for Y." It
 freezes a mutable choice into closed law — a later hardening pass takes it at
 its word and never revisits the decision, and when the decision changes the
-comment silently lies. The tell that separates it from a real WHY: it's a
-verdict on a choice, not a constraint the code must obey — reversing the
-decision wouldn't force anyone to touch the comment. Cut it; a decision worth
+comment silently lies. The tell that separates it from a real WHY: reversing
+the decision wouldn't force anyone to touch the comment — a verdict on a
+choice, not a constraint the code obeys. Cut it; a decision worth
 recording belongs in a long-lived design doc (reference it from the code if
 useful), never inline and never the temp plan. A genuine constraint stays — the
 mechanism keeps it honest ("must be u64; values exceed 2^32").
